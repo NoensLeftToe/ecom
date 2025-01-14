@@ -48,3 +48,35 @@ exports.loginUser = catchAsyncErrors(async(req,res,next)=>{
 
     
 });
+
+//logout  user
+
+exports.logout = catchAsyncErrors(async (req, res, next) => {
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
+  
+    res.status(200).json({
+      success: true,
+      message: "Logged Out",
+    });
+  });
+
+  //forget password
+  exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
+
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+      return next(new ErrorHandler("User not found", 404));
+    }
+     // Get ResetPassword Token
+  const resetToken = user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`
+  const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\nIf you have not requested this email then, please ignore it.`;
+
+})
