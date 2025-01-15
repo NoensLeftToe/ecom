@@ -4,28 +4,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncError");
 const ApiFeatures = require("../utils/apifeatures");
 //create product admin
 exports.createProduct = catchAsyncErrors( async (req, res, next) => {
-    // let images = [];
-  
-    // if (typeof req.body.images === "string") {
-    //   images.push(req.body.images);
-    // } else {
-    //   images = req.body.images;
-    // }
-  
-    // const imagesLinks = [];
-  
-    // for (let i = 0; i < images.length; i++) {
-    //   const result = await cloudinary.v2.uploader.upload(images[i], {
-    //     folder: "products",
-    //   });
-  
-    //   imagesLinks.push({
-    //     public_id: result.public_id,
-    //     url: result.secure_url,
-    //   });
-    // }
-  
-    // req.body.images = imagesLinks;
+
     req.body.user = req.user.id;
   
     const product = await Product.create(req.body);
@@ -135,13 +114,74 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
 
   let avg = 0;
 
-  product.reviews.forEach((rev) => {
+  product.ratings = product.reviews.forEach((rev) => {
+    avg += rev.rating;
+  })
+  
+  product.ratings= avg/product.reviews.length;
+
+  await product.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
+// Get All Reviews of a product
+exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
+  const product = await Product.findById(req.query.id);
+
+  if (!product) {
+    return next(new ErrorHandler("Product not found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    reviews: product.reviews,
+  });
+});
+
+// Delete Review
+exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
+  const product = await Product.findById(req.query.productId);
+
+  if (!product) {
+    return next(new ErrorHandler("Product not found", 404));
+  }
+
+  const reviews = product.reviews.filter(
+    (rev) => rev._id.toString() !== req.query.id.toString()
+  );
+
+  let avg = 0;
+
+  reviews.forEach((rev) => {
     avg += rev.rating;
   });
 
-  product.ratings = avg / product.reviews.length;
+  let ratings = 0;
 
-  await product.save({ validateBeforeSave: false });
+  if (reviews.length === 0) {
+    ratings = 0;
+  } else {
+    ratings = avg / reviews.length;
+  }
+
+  const numOfReviews = reviews.length;
+
+  await Product.findByIdAndUpdate(
+    req.query.productId,
+    {
+      reviews,
+      ratings,
+      numOfReviews,
+    },
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
 
   res.status(200).json({
     success: true,
