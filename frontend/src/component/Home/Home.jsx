@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { CgMouse } from "react-icons/cg";
 import Product from './Product';
 import "./Home.css"
-
+import MetaData from '../layout/MetaData';
 
 const product = {
   name: "hotarubi mask",
@@ -14,8 +14,9 @@ const product = {
 const Home = () => {
   return (
     <Fragment>
+      <MetaData title="1-STOP"/>
         <div className="banner">
-            <p><span>Welcome to Power-Ranger.</span></p>
+            <p><span>Welcome to 1-STOP.</span></p>
             <h1> <strong><span>FIND ALL THE MERCH's </span>BELOW</strong></h1>
 
             <a href="#container">

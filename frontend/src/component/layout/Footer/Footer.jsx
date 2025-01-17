@@ -13,8 +13,8 @@ const Footer = () => {
         </div>
 
         <div className="midFooter">
-        <h1>POWER-RANGER.</h1>
-        <p>High Quality is our first priority</p>
+        <h1>ONE-STOP.</h1>
+        <p>Your own Anime Merch Store. </p>
         
         <p>Copyrights 2025 , Power Rangers</p>
         </div>
