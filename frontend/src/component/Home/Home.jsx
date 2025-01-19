@@ -1,8 +1,11 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect  } from 'react'
 import { CgMouse } from "react-icons/cg";
 import Product from './Product';
 import "./Home.css"
 import MetaData from '../layout/MetaData';
+import {getProduct} from "../../actions/productAction"
+import {useSelector,useDispatch} from "react-redux"
+
 
 const product = {
   name: "hotarubi mask",
@@ -12,6 +15,15 @@ const product = {
 }
 
 const Home = () => {
+
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(getProduct());
+  }, [dispatch]);
+
+
+
   return (
     <Fragment>
       <MetaData title="1-STOP"/>

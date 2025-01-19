@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
-import { default as thunk } from 'redux-thunk';  // Named import workaround
+import {thunk} from 'redux-thunk';  // Named import workaround
  // Correct import for redux-thunk
-import { composeWithDevTools } from "redux-devtools-extension";
+ import { composeWithDevTools } from "@redux-devtools/extension";
 import { productReducer } from './reducers/productReducer';  // Correct named import
 
 const reducer = combineReducers({
