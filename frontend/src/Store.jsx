@@ -1,21 +1,10 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
-import {thunk} from 'redux-thunk';  // Named import workaround
- // Correct import for redux-thunk
- import { composeWithDevTools } from "@redux-devtools/extension";
-import { productReducer } from './reducers/productReducer';  // Correct named import
+import { configureStore } from "@reduxjs/toolkit";
+import productReducer from "./reducers/productReducer"; // Importing the productReducer
 
-const reducer = combineReducers({
-    products: productReducer,
+const store = configureStore({
+  reducer: {
+    products: productReducer, // This manages the state for products
+  },
 });
-
-let initialState = {};
-
-const middleware = [thunk];
-
-const store = createStore(
-    reducer,
-    initialState,
-    composeWithDevTools(applyMiddleware(...middleware))
-);
 
 export default store;
