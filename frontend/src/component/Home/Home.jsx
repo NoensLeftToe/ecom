@@ -5,49 +5,52 @@ import "./Home.css"
 import MetaData from '../layout/MetaData';
 import {getProduct} from "../../actions/productAction"
 import {useSelector,useDispatch} from "react-redux"
+import Loader from "../layout/Loader/Loader";
+import {useAlert} from "react-alert"
 
 
-const product = {
-  name: "hotarubi mask",
-  images: [{url:"https://i.pinimg.com/736x/ba/a9/63/baa963bfdbda885cf24392b5e347603f.jpg"}],
-  price:"3000$",
-  _id:"abhishek",
-}
 
 const Home = () => {
 
+  const alert = useAlert()
   const dispatch = useDispatch();
+  const { loading, error, products } = useSelector((state) => state.products);
+
   
   useEffect(() => {
+    if (error) {
+      alert.error(error);
+    }
     dispatch(getProduct());
-  }, [dispatch]);
+  }, [dispatch,error]);
 
 
 
   return (
     <Fragment>
-      <MetaData title="1-STOP"/>
-        <div className="banner">
-            <p><span>Welcome to 1-STOP.</span></p>
-            <h1> <strong><span>FIND ALL THE MERCH's </span>BELOW</strong></h1>
-
-            <a href="#container">
-                <button>
-                    Scroll <CgMouse />
-                </button>
-            </a>
-        </div>
-        <h2 className="homeHeading">Featured Products</h2>
-        <div className="container" id="container">
-        <Product product={product}/>
-        <Product product={product}/>
-        <Product product={product}/>
-        <Product product={product}/>
-        <Product product={product}/>
-        <Product product={product}/>
-        <Product product={product}/>
-        </div>
-    </Fragment>
+      {loading ? (<Loader />):(
+        <Fragment>
+        <MetaData title="1-STOP"/>
+          <div className="banner">
+              <p><span>Welcome to 1-STOP.</span></p>
+              <h1> <strong><span>FIND ALL THE MERCH's </span>BELOW</strong></h1>
+  
+              <a href="#container">
+                  <button>
+                      Scroll <CgMouse />
+                  </button>
+              </a>
+          </div>
+          <h2 className="homeHeading">Featured Products</h2>
+          <div className="container" id="container">
+          {products &&
+                products.map((product) => (
+                  <Product  product = {product} />
+                ))}
+          </div>
+      </Fragment>
+      )}
+      </Fragment>
   )
 }
 

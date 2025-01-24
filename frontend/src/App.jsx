@@ -6,6 +6,7 @@ import Home from './component/Home/Home';
 import './App.css';
 import WebFont from 'webfontloader';
 
+
 function App() {
   useEffect(() => {
     WebFont.load({
@@ -20,6 +21,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        
       </Routes>
       <Footer />
     </Router>

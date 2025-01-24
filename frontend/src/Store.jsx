@@ -4,6 +4,7 @@ import productReducer from "./reducers/productReducer"; // Importing the product
 const store = configureStore({
   reducer: {
     products: productReducer, // This manages the state for products
+   
   },
 });
 

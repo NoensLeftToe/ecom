@@ -5,6 +5,7 @@ import AwesomeStarsRating from "react-awesome-stars-rating"
 const Product = ({ product }) => {
   const options = {
     edit: false,
+    value: product.ratings
   }
 
   return (
@@ -13,7 +14,7 @@ const Product = ({ product }) => {
       <p>{product.name}</p>
       <div>
         <AwesomeStarsRating {...options} />
-        <span> (256 reviews)</span>
+        <span>({product.numOfReviews} Reviews)</span>
       </div>
       <span>{`${product.price}`}</span>
     </Link>
