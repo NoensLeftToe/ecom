@@ -5,9 +5,16 @@ import axios from "axios";
 // Async action to fetch products
 export const getProduct = createAsyncThunk(
   "products/getProduct",
-  async (_, { rejectWithValue }) => {
+  async ({ keyword = "", currentPage = 1, price=[0,25000], category, ratings = 0 }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get("/api/v1/products");
+      let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}`;
+      
+      if(category){
+        link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}`
+      }
+      
+      console.log("Keyword in getProduct action:", keyword);
+      const { data } = await axios.get(link);
       console.log("API Response: ", data);
       return data; // Automatically becomes the payload for fulfilled state
     } catch (error) {

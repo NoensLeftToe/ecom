@@ -33,6 +33,8 @@ const productListSlice = createSlice({
         state.loading = false;
         state.products = action.payload.products; // List of products
         state.productsCount = action.payload.productCount; // Total products count
+        state.resultPerPage = action.payload.resultPerPage;
+        state.filteredProductsCount = action.payload.filteredProductsCount;
       })
       .addCase(getProduct.rejected, (state, action) => {
         state.loading = false;
