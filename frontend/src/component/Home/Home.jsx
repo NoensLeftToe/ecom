@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect } from "react";
 import { CgMouse } from "react-icons/cg";
-import Product from './Product';
 import "./Home.css";
 import MetaData from "../layout/MetaData";
 import { getProduct, clearErrors } from "../../actions/productAction";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../layout/Loader/Loader";
 import { useAlert } from "react-alert";
+import ProductCard from "./ProductCard";
 
 const Home = () => {
   const alert = useAlert();
@@ -18,7 +18,7 @@ const Home = () => {
   useEffect(() => {
     if (error) {
       alert.error(error);  // Show the error message
-      // dispatch(clearErrors());  // Clear the error after showing it
+      dispatch(clearErrors());  // Clear the error after showing it
     }
 
     // Only dispatch getProduct if products are not already loaded and there's no ongoing loading
@@ -56,7 +56,7 @@ const Home = () => {
           <div className="container" id="container">
             {/* Fallback if no products are found */}
             {products && products.length > 0 ? (
-              products.map((product) => <Product key={product._id} product={product} />)
+              products.map((product) => <ProductCard key={product._id} product={product} />)
             ) : (
               <p>No products found.</p>
             )}

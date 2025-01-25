@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import AwesomeStarsRating from "react-awesome-stars-rating"
 
-const Product = ({ product }) => {
+const ProductCard = ({ product }) => {
   const options = {
     edit: false,
     value: product.ratings
@@ -21,4 +21,4 @@ const Product = ({ product }) => {
   )
 }
 
-export default Product
+export default ProductCard;
