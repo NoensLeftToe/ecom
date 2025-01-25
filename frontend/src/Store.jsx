@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import productReducer from "./reducers/productReducer"; // Importing the productReducer
+import productReducers from "./reducers/productReducer"; // Import the product reducer file
 
 const store = configureStore({
   reducer: {
-    products: productReducer, // This manages the state for products
-   
+    productList: productReducers.productList, // For the list of products
+    productDetails: productReducers.productDetails, // For product details
   },
 });
 

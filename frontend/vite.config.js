@@ -8,7 +8,7 @@ export default defineConfig({
     host: '0.0.0.0', // This makes the server accessible on the network
     port: 5173,      // Optional: Specify the port
     proxy: {
-      '/api': 'http://192.168.100.5:4000', // Adjust this to your backend API server's URL
+      '/api': 'http://192.168.100.7:4000', // Adjust this to your backend API server's URL
     }
   }
 })

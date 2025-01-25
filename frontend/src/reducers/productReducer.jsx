@@ -1,16 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProduct } from "../actions/productAction";
+import { getProduct, getProductDetails } from "../actions/productAction";
 
-const initialState = {
-  products: [],
+const initialStateProducts = {
+  products: [], // List of products
   loading: false,
   error: null,
-  productsCount: 0,
+  productsCount: 0, // Total number of products
 };
 
-const productSlice = createSlice({
-  name: "products",
-  initialState,
+const initialStateProductDetails = {
+  product: {}, // Single product details
+  loading: false,
+  error: null,
+};
+
+// Product List Slice (for `getProduct`)
+const productListSlice = createSlice({
+  name: "productList",
+  initialState: initialStateProducts,
   reducers: {
     clearErrors(state) {
       state.error = null; // Clear the error from the state
@@ -20,48 +27,52 @@ const productSlice = createSlice({
     builder
       .addCase(getProduct.pending, (state) => {
         state.loading = true;
-        state.products = [];
+        state.products = []; // Reset the products list
       })
       .addCase(getProduct.fulfilled, (state, action) => {
-        console.log("Payload in fulfilled case: ", action.payload);
         state.loading = false;
-        state.products = action.payload.products;
-        state.productsCount = action.payload.productCount; // Use 'productCount' as per API response
+        state.products = action.payload.products; // List of products
+        state.productsCount = action.payload.productCount; // Total products count
       })
       .addCase(getProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload; // Handle the error
       });
   },
 });
 
+// Product Details Slice (for `getProductDetails`)
 const productDetailsSlice = createSlice({
   name: "productDetails",
-  initialState,
+  initialState: initialStateProductDetails,
   reducers: {
     clearErrors(state) {
-      state.error = null; // Clear the error
+      state.error = null; // Clear the error from the state
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getProductDetails.pending, (state) => {
-        state.loading = true; // Start loading when request is sent
-        state.product = {}; // Clear previous product data
+        state.loading = true;
+        state.product = {}; // Reset the single product details
       })
       .addCase(getProductDetails.fulfilled, (state, action) => {
-        state.loading = false; // Stop loading when request is successful
-        state.product = action.payload; // Assign the product data from payload
+        state.loading = false;
+        state.product = action.payload; // Single product details
       })
       .addCase(getProductDetails.rejected, (state, action) => {
-        state.loading = false; // Stop loading if there was an error
-        state.error = action.payload; // Assign the error message
+        state.loading = false;
+        state.error = action.payload; // Handle the error
       });
   },
 });
 
 // Export actions
-export const { clearErrors } = productSlice.actions;
+export const { clearErrors } = productListSlice.actions;
+export const { clearErrors: clearProductDetailsErrors } = productDetailsSlice.actions;
 
-// Export reducer
-export default productSlice.reducer;
+// Export reducers
+export default {
+  productList: productListSlice.reducer,
+  productDetails: productDetailsSlice.reducer,
+};
