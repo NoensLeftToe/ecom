@@ -7,7 +7,8 @@ import Loader from '../layout/Loader/Loader';
 import ProductCard from '../Home/ProductCard';
 import Pagination from "react-js-pagination";
 import Slider from "@material-ui/core/Slider";
-import Typography from "@material-ui/core/Typography"
+import Typography from "@material-ui/core/Typography";
+import {useAlert} from "react-alert";
 
 const categories = [
   "Studio Ghibli",
@@ -26,6 +27,8 @@ const categories = [
 
 const Products = () => {
   const dispatch = useDispatch();
+
+  const alert = useAlert();
 
   const { products, loading, error, productsCount, resultPerPage, filteredProductsCount, } = useSelector((state) => state.productList);
 
@@ -47,8 +50,13 @@ const Products = () => {
   };
 
   useEffect(() => {
+      if(error){
+        alert.error(error);
+        dispatch(clearErrors());
+      }
+
     dispatch(getProduct({ keyword, currentPage, price, category, ratings }));
-  }, [dispatch, keyword, currentPage, price, category, ratings]);
+  }, [dispatch, keyword, currentPage, price, category, ratings, alert, error]);
 
 
   let count = filteredProductsCount;

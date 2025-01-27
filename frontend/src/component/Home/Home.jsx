@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { CgMouse } from "react-icons/cg";
 import "./Home.css";
 import MetaData from "../layout/MetaData";
@@ -15,17 +15,27 @@ const Home = () => {
   // Accessing the productList state
   const { loading, error, products } = useSelector((state) => state.productList);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Display 10 products per page
+
   useEffect(() => {
     if (error) {
-      alert.error(error);  // Show the error message
-      dispatch(clearErrors());  // Clear the error after showing it
+      alert.error(error);
+      dispatch(clearErrors());
     }
 
-    // Only dispatch getProduct if products are not already loaded and there's no ongoing loading
-    if (!loading && !products.length) {
-      dispatch(getProduct());
-    }
-  }, [dispatch, error, alert, loading, products]);
+    // Fetch products whenever the current page changes
+    dispatch(getProduct({ currentPage }));
+  }, [dispatch, error, alert, currentPage]);
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
 
   return (
     <Fragment>
@@ -54,12 +64,23 @@ const Home = () => {
           <h2 className="homeHeading">Featured Products</h2>
 
           <div className="container" id="container">
-            {/* Fallback if no products are found */}
             {products && products.length > 0 ? (
-              products.map((product) => <ProductCard key={product._id} product={product} />)
+              products.slice(0, itemsPerPage).map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))
             ) : (
               <p>No products found.</p>
             )}
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="pagination">
+            <button onClick={handlePrevPage} disabled={currentPage === 1}>
+              Previous
+            </button>
+            <button onClick={handleNextPage}>
+              Next
+            </button>
           </div>
         </Fragment>
       )}
