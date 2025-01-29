@@ -1,12 +1,21 @@
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useRef, useState, useEffect } from 'react';
 import "./LoginSignUp.css";
 import Loader from "../layout/Loader/Loader";
 import { Link } from "react-router-dom";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import FaceIcon from "@material-ui/icons/Face";
+import{ useDispatch, useSelector} from "react-redux";
+import { clearErrors, login } from '../../actions/userAction';
+import{useAlert} from "react-alert";
 
 const LoginSignUp = () => {
+
+  const dispatch = useDispatch();
+ const alert = useAlert();
+
+ const{error, loading, isAuthenticated} = useSelector((state) => state.user);
+
   const loginTab = useRef(null);
   const registerTab = useRef(null);
   const switcherTab = useRef(null);
@@ -28,8 +37,10 @@ const LoginSignUp = () => {
 
   const loginSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(loginEmail, loginPassword)); // Assumes `dispatch` and `login` are defined in your code
+    console.log("🛠️ Sending login request:", { email: loginEmail, password: loginPassword }); // Debugging
+    dispatch(login({ email: loginEmail, password: loginPassword })); // ✅ Corrected
   };
+  
 
   const registerSubmit = (e) => {
     e.preventDefault();
@@ -40,7 +51,7 @@ const LoginSignUp = () => {
     myForm.set("email", email);
     myForm.set("password", password);
     myForm.set("avatar", avatar);
-    dispatch(register(myForm));
+    dispatch(register(myForm)); 
   };
 
   const registerDataChange = (e) => {
@@ -59,6 +70,14 @@ const LoginSignUp = () => {
     }
   };
 
+
+
+  useEffect(()=>{
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+  },[dispatch, error, alert]);
 
   const switchTabs = (e, tab) => {
     if (tab === "login") {
@@ -79,6 +98,7 @@ const LoginSignUp = () => {
 
   return (
     <Fragment>
+      {loading ? <Loader />:<Fragment>
       <div className="LoginSignUpContainer">
         <div className="LoginSignUpBox">
           <div>
@@ -165,7 +185,8 @@ const LoginSignUp = () => {
               </form>
         </div>
       </div>
-    </Fragment>
+    </Fragment>}
+      </Fragment>
   );
 };
 
