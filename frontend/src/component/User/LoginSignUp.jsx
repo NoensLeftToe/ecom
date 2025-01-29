@@ -6,13 +6,16 @@ import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import FaceIcon from "@material-ui/icons/Face";
 import{ useDispatch, useSelector} from "react-redux";
-import { clearErrors, login } from '../../actions/userAction';
+import { clearErrors, login, register } from '../../actions/userAction';
 import{useAlert} from "react-alert";
+import { useNavigate } from "react-router-dom";
+
 
 const LoginSignUp = () => {
 
-  const dispatch = useDispatch();
+const dispatch = useDispatch();
  const alert = useAlert();
+ const navigate = useNavigate();
 
  const{error, loading, isAuthenticated} = useSelector((state) => state.user);
 
@@ -77,7 +80,11 @@ const LoginSignUp = () => {
       alert.error(error);
       dispatch(clearErrors());
     }
-  },[dispatch, error, alert]);
+   if(isAuthenticated){
+     navigate("/account")
+   }
+
+  },[dispatch, error, alert, navigate, isAuthenticated]);
 
   const switchTabs = (e, tab) => {
     if (tab === "login") {
