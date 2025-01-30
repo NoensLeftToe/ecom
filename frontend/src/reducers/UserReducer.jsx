@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login, register, loadUser } from '../actions/userAction'; // Import the login, register, and loadUser actions
+import { login, register, loadUser, logout } from '../actions/userAction'; // Import logout action
 
 const initialState = {
   user: null,
@@ -40,7 +40,7 @@ const userSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAuthenticated = true; // You can adjust this based on your needs
+        state.isAuthenticated = true;
         state.user = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
@@ -62,11 +62,48 @@ const userSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = false;
         state.user = null;
-        state.error = action.payload; // Set the error from action payload
+        state.error = action.payload;
+      })
+      // Logout actions
+      .addCase(logout.fulfilled, (state) => {
+        state.loading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
+const profileSlice = createSlice({
+  name: "profile",
+  initialState,
+  reducers: {
+    clearErrors: (state) => {
+      state.error = null;
+    },
+    resetUpdate: (state) => {
+      state.isUpdated = false;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // Update Profile Actions
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isUpdated = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
 export const { clearErrors } = userSlice.actions;
 
 export default userSlice.reducer;

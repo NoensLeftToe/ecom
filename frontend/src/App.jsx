@@ -11,7 +11,16 @@ import Search from "./component/Product/Search"
 import LoginSignUp from "./component/User/LoginSignUp"
 import store from "./store"
 import {loadUser} from "./actions/userAction"
+import UserOptions from "./component/layout/Header/UserOptions"
+import { useSelector } from 'react-redux';
+import Profile from "./component/User/Profile"
+import ProtectedRoute from "./component/Route/ProtectedRoute"
+import UpdateProfile from "./component/User/UpdateProfile"
+import UpdatePassword from "./component/User/UpdatePassword"
 function App() {
+
+  const {isAuthenticated, user} = useSelector(state=>state.user)
+
   useEffect(() => {
     WebFont.load({
       google: {
@@ -25,12 +34,28 @@ function App() {
   return (
     <Router>
       <Header />
+      {isAuthenticated && <UserOptions user = {user}/>}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetails/>} />
         <Route path="/products" element={<Products/>} />
         <Route path="/products/:keyword" element={<Products/>} />
         <Route path="/search" element={<Search />} />
+        
+        <Route element={<ProtectedRoute />}>
+        <Route path="/account" element={<Profile />} />
+        </Route>
+
+        <Route element={<ProtectedRoute />}>
+        <Route path="/me/update" element={<UpdateProfile />} />
+        </Route>
+
+        <Route element={<ProtectedRoute />}>
+        <Route path="/password/update" element={<UpdatePassword />} />
+        </Route>
+
+
+
         <Route path="/login" element={<LoginSignUp />} />
       </Routes>
       <Footer />

@@ -53,6 +53,44 @@ export const loadUser = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk("user/logout", async (_, { rejectWithValue }) => {
+  try {
+    await axios.get(`/api/v1/logout`);
+    return true; // Returning success, though it's not used in the reducer
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || "Logout failed");
+  }
+});
+
+// Update Profile
+export const updateProfile = createAsyncThunk(
+  "profile/updateProfile",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
+      const { data } = await axios.put(`/api/v1/me/update`, userData, config);
+      return data.success; // Return success status
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Profile update failed");
+    }
+  }
+);
+
+// Update Password
+export const updatePassword = createAsyncThunk(
+  "profile/updatePassword",
+  async (passwords, { rejectWithValue }) => {
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.put("/api/v1/password/update", passwords, config);
+
+      return data.success; // Return the success status
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Password update failed");
+    }
+  }
+);
+
 
 // Clear errors action
 export const clearErrors = () => ({
