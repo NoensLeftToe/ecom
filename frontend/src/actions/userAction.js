@@ -91,6 +91,35 @@ export const updatePassword = createAsyncThunk(
   }
 );
 
+// Forgot Password Action
+export const forgotPassword = createAsyncThunk(
+  "password/forgotPassword",
+  async ({email}, { rejectWithValue }) => {
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.post(`/api/v1/password/forgot`, { email }, config);
+      return data.message;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Password reset failed");
+    }
+  }
+);
+
+// Reset Password Action
+export const resetPassword = createAsyncThunk(
+  "password/resetPassword",
+  async ({ token, passwords }, { rejectWithValue }) => {
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.put(`/api/v1/password/reset/${token}`, passwords, config);
+      return data.success;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Password reset failed");
+    }
+  }
+);
+
+
 
 // Clear errors action
 export const clearErrors = () => ({

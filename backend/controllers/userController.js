@@ -86,7 +86,7 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`
+  const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`
   const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\nIf you have not requested this email then, please ignore it.`;
   try {
     await sendEmail({
@@ -124,7 +124,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
   });
   if (!user) {
     return next(
-      new ErrorHander(
+      new ErrorHandler(
         "Reset Password Token is invalid or has been expired",
         400
       )
@@ -132,7 +132,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
   }
 
   if (req.body.password !== req.body.confirmPassword) {
-    return next(new ErrorHander("Password does not password", 400));
+    return next(new ErrorHandler("Password does not password", 400));
   }
   user.password = req.body.password;
   user.resetPasswordToken = undefined;
@@ -161,11 +161,11 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
 
   if (!isPasswordMatched) {
-    return next(new ErrorHander("Old password is incorrect", 400));
+    return next(new ErrorHandler("Old password is incorrect", 400));
   }
 
   if (req.body.newPassword !== req.body.confirmPassword) {
-    return next(new ErrorHander("password does not match", 400));
+    return next(new ErrorHandler("password does not match", 400));
   }
 
   user.password = req.body.newPassword;
