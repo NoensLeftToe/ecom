@@ -9,6 +9,7 @@ import ReviewCard from "./ReviewCard";
 import Loader from "../layout/Loader/Loader";
 import { useAlert } from "react-alert";
 import MetaData from "../layout/MetaData";
+import{addItemsToCart} from "../../actions/cartAction"
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -46,6 +47,7 @@ const ProductDetails = () => {
   };
 
   const addToCartHandler = () => {
+    dispatch(addItemsToCart({ id, quantity }));
     console.log(`Added ${product.name} to cart`);
   };
 
