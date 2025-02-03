@@ -73,7 +73,7 @@ const dispatch = useDispatch();
     }
   };
 
-
+const redirect = location.search ? location.search.split("=")[1] : "/account";
 
   useEffect(()=>{
     if (error) {
@@ -81,10 +81,10 @@ const dispatch = useDispatch();
       dispatch(clearErrors());
     }
    if(isAuthenticated){
-     navigate("/account")
+     navigate(redirect);
    }
 
-  },[dispatch, error, alert, navigate, isAuthenticated]);
+  },[dispatch, error, alert, navigate, isAuthenticated, redirect]);
 
   const switchTabs = (e, tab) => {
     if (tab === "login") {

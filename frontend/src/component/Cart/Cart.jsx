@@ -32,7 +32,7 @@ const Cart = () => {
   };
 
   const checkoutHandler = () => {
-    navigate("/login?redirect=shipping"); // ✅ Use navigate instead of history.push()
+    navigate("/shipping"); // ✅ Use navigate instead of history.push()
   };
   return (
     <Fragment>
@@ -58,7 +58,7 @@ const Cart = () => {
                   <button onClick={() => decreaseQuantity(item.product, item.quantity)}>
                     -
                   </button>
-                  <input type="number" value={item.quantity} readOnly />
+                  <input type="text" value={item.quantity} readOnly />
                   <button onClick={() => increaseQuantity(item.product, item.quantity, item.stock)}>
                     +
                   </button>
