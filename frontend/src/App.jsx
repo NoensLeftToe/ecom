@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from './component/layout/Header/Header';
 import Footer from './component/layout/Footer/Footer';
@@ -22,10 +22,20 @@ import ResetPassword from "./component/User/ResetPassword"
 import Cart from "./component/Cart/Cart"
 import Shipping from "./component/Cart/Shipping";
 import ConfirmOrder from "./component/Cart/ConfirmOrder";
+import axios from "axios"
+import Payment from "./component/Cart/Payment"
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 function App() {
 
-  const {isAuthenticated, user} = useSelector(state=>state.user)
+  const { isAuthenticated, user } = useSelector(state => state.user);
+  const [stripeApiKey, setStripeApiKey] = useState("");
+
+  async function getStripeApiKey() {
+    const { data } = await axios.get("/api/v1/stripeapikey");
+    setStripeApiKey(data.stripeApiKey);
+  }
 
   useEffect(() => {
     WebFont.load({
@@ -34,49 +44,43 @@ function App() {
       }
     });
 
-    store.dispatch(loadUser())
+    store.dispatch(loadUser());
+    getStripeApiKey();
   }, []);
 
   return (
     <Router>
       <Header />
-      {isAuthenticated && <UserOptions user = {user}/>}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/product/:id" element={<ProductDetails/>} />
-        <Route path="/products" element={<Products/>} />
-        <Route path="/products/:keyword" element={<Products/>} />
-        <Route path="/search" element={<Search />} />
-        
-        <Route element={<ProtectedRoute />}>
-        <Route path="/account" element={<Profile />} />
-        </Route>
+      {isAuthenticated && <UserOptions user={user} />}
+      
+      {/* Stripe Elements Wrapper Outside Routes */}
+      {stripeApiKey && (
+        <Elements stripe={loadStripe(stripeApiKey)}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:keyword" element={<Products />} />
+            <Route path="/search" element={<Search />} />
 
-        <Route element={<ProtectedRoute />}>
-        <Route path="/me/update" element={<UpdateProfile />} />
-        </Route>
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/account" element={<Profile />} />
+              <Route path="/me/update" element={<UpdateProfile />} />
+              <Route path="/password/update" element={<UpdatePassword />} />
+              <Route path="/shipping" element={<Shipping />} />
+              <Route path="/order/confirm" element={<ConfirmOrder />} />
+              <Route path="/payment/process" element={<Payment />} />
+            </Route>
 
-        <Route element={<ProtectedRoute />}>
-        <Route path="/password/update" element={<UpdatePassword />} />
-        </Route>
-
-        
-        <Route path="/password/forgot" element={<ForgotPassword />} />
-        
-        <Route path="/password/reset/:token" element={<ResetPassword />} />
-        
-        <Route path="/cart" element={<Cart />} />
-
-        <Route element={<ProtectedRoute />}>
-        <Route path="/shipping" element={<Shipping />} />
-        </Route>
-
-        <Route element={<ProtectedRoute />}>
-        <Route path="/order/confirm" element={<ConfirmOrder />} />
-        </Route>
-
-        <Route path="/login" element={<LoginSignUp />} />
-      </Routes>
+            <Route path="/password/forgot" element={<ForgotPassword />} />
+            <Route path="/password/reset/:token" element={<ResetPassword />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/login" element={<LoginSignUp />} />
+          </Routes>
+        </Elements>
+      )}
+      
       <Footer />
     </Router>
   );

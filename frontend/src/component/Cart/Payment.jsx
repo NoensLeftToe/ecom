@@ -11,18 +11,15 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-
 import axios from "axios";
-import "./payment.css";
+import "./Payment.css";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import EventIcon from "@material-ui/icons/Event";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
-// import { createOrder, clearErrors } from "../../actions/orderAction";
 import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
 
 const Payment = () => {
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
-
   const dispatch = useDispatch();
   const alert = useAlert();
   const stripe = useStripe();
@@ -32,24 +29,19 @@ const Payment = () => {
 
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.user);
-  const { error } = useSelector((state) => state.newOrder);
 
   const paymentData = {
     amount: Math.round(orderInfo.totalPrice * 100),
   };
 
-  const order = {
-    shippingInfo,
-    orderItems: cartItems,
-    itemsPrice: orderInfo.subtotal,
-    taxPrice: orderInfo.tax,
-    shippingPrice: orderInfo.shippingCharges,
-    totalPrice: orderInfo.totalPrice,
-  };
-
   const submitHandler = async (e) => {
     e.preventDefault();
     payBtn.current.disabled = true;
+
+    if (!stripe || !elements) {
+      alert.error("Stripe has not been properly initialized.");
+      return;
+    }
 
     try {
       const config = {
@@ -58,8 +50,6 @@ const Payment = () => {
 
       const { data } = await axios.post("/api/v1/payment/process", paymentData, config);
       const client_secret = data.client_secret;
-
-      if (!stripe || !elements) return;
 
       const result = await stripe.confirmCardPayment(client_secret, {
         payment_method: {
@@ -83,16 +73,10 @@ const Payment = () => {
         alert.error(result.error.message);
       } else {
         if (result.paymentIntent.status === "succeeded") {
-          order.paymentInfo = {
-            id: result.paymentIntent.id,
-            status: result.paymentIntent.status,
-          };
-
-          dispatch(createOrder(order));
-
-          navigate("/success"); // ✅ Use navigate instead of history.push()
+          // Successfully processed the payment
+          navigate("/success");
         } else {
-          alert.error("There's some issue while processing payment ");
+          alert.error("There was an issue with the payment.");
         }
       }
     } catch (error) {
@@ -101,20 +85,14 @@ const Payment = () => {
     }
   };
 
-  useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-  }, [dispatch, error, alert]);
-
   return (
     <Fragment>
       <MetaData title="Payment" />
       <CheckoutSteps activeStep={2} />
       <div className="paymentContainer">
-        <form className="paymentForm" onSubmit={submitHandler}>
+        <form className="paymentForm" onSubmit={(e) => submitHandler(e)}>
           <Typography>Card Info</Typography>
+
           <div>
             <CreditCardIcon />
             <CardNumberElement className="paymentInput" />
