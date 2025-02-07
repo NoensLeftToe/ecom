@@ -4,6 +4,7 @@ import userReducer from "./reducers/UserReducer";
 import profileReducer from "./reducers/ProfileSlice"
 import forgotPasswordReducer from "./reducers/forgotPasswordReducer"
 import cartReducer from "./reducers/cartReducer"
+import {newOrderReducer, myOrdersReducer} from "./reducers/orderReducer"
 const store = configureStore({
   reducer: {
     productList: productReducers.productList, // For the list of products
@@ -12,6 +13,8 @@ const store = configureStore({
     profile: profileReducer, 
     forgotPassword: forgotPasswordReducer,
     cart: cartReducer,
+    newOrder:newOrderReducer,
+    myOrders: myOrdersReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
