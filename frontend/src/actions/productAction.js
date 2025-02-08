@@ -78,6 +78,24 @@ export const getProductDetails = createAsyncThunk(
   }
 );
 
+// Async thunk for new review submission
+export const newReview = createAsyncThunk(
+  "newReview/submit",
+  async (reviewData, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: { "Content-Type": "application/json" },
+      };
+
+      const { data } = await axios.put(`/api/v1/review`, reviewData, config);
+      return data.success;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Review submission failed");
+    }
+  }
+);
+
+
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });

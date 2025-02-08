@@ -28,6 +28,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import OrderSuccess from './component/Cart/OrderSuccess'
 import MyOrders from "./component/Order/MyOrders"
+import OrderDetails from "./component/Order/OrderDetails"
 
 function App() {
 
@@ -71,11 +72,14 @@ function App() {
               <Route path="/me/update" element={<UpdateProfile />} />
               <Route path="/password/update" element={<UpdatePassword />} />
               <Route path="/shipping" element={<Shipping />} />
-              <Route path="/order/confirm" element={<ConfirmOrder />} />
               <Route path="/payment/process" element={<Payment />} />
               <Route path="/success" element={<OrderSuccess/>} />
               <Route path="/orders" element={<MyOrders/>} />
 
+             
+             <Route path="/order/confirm" element={<ConfirmOrder />} />
+              <Route path="/order/:id" element={<OrderDetails/>} />
+             
             </Route>
 
             <Route path="/password/forgot" element={<ForgotPassword />} />

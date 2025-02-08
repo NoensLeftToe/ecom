@@ -14,11 +14,22 @@ const MyOrders = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
 
-  const { loading, error, orders } = useSelector((state) => state.myOrders);
+  // ✅ Ensure orders is always an array
+  const { loading, error, orders = [] } = useSelector((state) => state.myOrders);
   const { user } = useSelector((state) => state.user);
 
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+    dispatch(myOrders());
+  }, [dispatch, error, alert]);
+
+  console.log("Redux Orders:", orders); // ✅ Debugging step
+
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 300, flex: 1 },
+    { field: "id", headerName: "Order ID", minWidth: 200, flex: 1 },
     {
       field: "status",
       headerName: "Status",
@@ -38,15 +49,14 @@ const MyOrders = () => {
       field: "amount",
       headerName: "Amount",
       type: "number",
-      minWidth: 270,
+      minWidth: 200,
       flex: 0.5,
     },
     {
       field: "actions",
-      flex: 0.3,
       headerName: "Actions",
       minWidth: 150,
-      type: "actions",
+      flex: 0.3,
       sortable: false,
       renderCell: (params) => (
         <Link to={`/order/${params.row.id}`}>
@@ -56,37 +66,36 @@ const MyOrders = () => {
     },
   ];
 
-  const rows = orders?.map((item) => ({
-    id: item._id,
-    itemsQty: item.orderItems.length,
-    status: item.orderStatus,
-    amount: item.totalPrice,
-  })) || [];
-
-  useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-    dispatch(myOrders());
-  }, [dispatch, error]);
+  // ✅ Ensure rows are created only when `orders` exist
+  const rows = orders.length > 0 ? orders.map((order) => ({
+    id: order?._id || "N/A",
+    itemsQty: order?.orderItems?.length || 0,
+    status: order?.orderStatus || "N/A",
+    amount: order?.totalPrice || 0,
+  })) : [];
 
   return (
     <Fragment>
-      <MetaData title={`${user?.name} - Orders`} />
+      <MetaData title={`${user?.name || "User"} - Orders`} />
       {loading ? (
         <Loader />
       ) : (
         <div className="myOrdersPage">
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            disableSelectionOnClick
-            className="myOrdersTable"
-            autoHeight
-          />
-          <Typography id="myOrdersHeading">{user?.name}'s Orders</Typography>
+          <Typography id="myOrdersHeading">
+            {user?.name || "User"}'s Orders
+          </Typography>
+          {rows.length > 0 ? (
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={10}
+              autoHeight
+              disableSelectionOnClick
+              className="myOrdersTable"
+            />
+          ) : (
+            <Typography className="noOrdersMessage">No orders found.</Typography>
+          )}
         </div>
       )}
     </Fragment>

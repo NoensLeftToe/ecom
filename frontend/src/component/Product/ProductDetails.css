@@ -21,9 +21,11 @@
 
 .CarouselImage {
   width: 100%;
-  height: 400px; /* Adjust as needed */
+  max-width: 500px;  /* Prevent it from shrinking too much */
+  height: 400px;  /* Adjust this if needed */
   object-fit: contain;
 }
+
 
 .detailsBlock-1 > h2 {
   color: rgb(54, 54, 54);
