@@ -6,7 +6,7 @@ import { FaBullseye } from 'react-icons/fa';
 const ProtectedRoute = ({ component: Component, isAdmin, ...rest }) => {
   const { loading, isAuthenticated, user } = useSelector((state) => state.user);
 
-  if (loading) {
+  if (loading === false) {
     return <div>Loading...</div>; // Optional: Show a loading state until user data is available
   }
 

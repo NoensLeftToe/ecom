@@ -1,20 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import AwesomeStarsRating from "react-awesome-stars-rating"
+import { Rating } from "@mui/material"
 
 const ProductCard = ({ product }) => {
   const options = {
     edit: false,
-    value: product.ratings
+    value: product.ratings,
+    readOnly: true
   }
+
+  
 
   return (
     <Link className="productCard" to={`/product/${product._id}`}>
       <img src={product.images[0].url} alt="" />
       <p>{product.name}</p>
       <div>
-        <AwesomeStarsRating {...options} />
-        <span>({product.numOfReviews} Reviews)</span>
+        <Rating {...options} />
+        <span className='productCardSpan'>({product.numOfReviews} Reviews)</span>
       </div>
       <span>{`${product.price}`}</span>
     </Link>
