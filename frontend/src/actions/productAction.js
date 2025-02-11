@@ -127,6 +127,41 @@ export const getAdminProduct = createAsyncThunk(
   }
 );
 
+// ✅ Update Product (Redux Toolkit Version)
+export const updateProduct = createAsyncThunk(
+  "product/updateProduct",
+  async ({ id, productData }, { rejectWithValue }) => {
+    try {
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
+
+      const { data } = await axios.put(
+        `/api/v1/admin/product/${id}`,
+        productData,
+        config
+      );
+
+      return data.success; // This becomes the payload in fulfilled state
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// ✅ Delete Product (Redux Toolkit Version)
+export const deleteProduct = createAsyncThunk(
+  "product/deleteProduct",
+  async (id, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.delete(`/api/v1/admin/product/${id}`);
+
+      return data.success; // This becomes the payload in fulfilled state
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProduct, getProductDetails, createProduct, newReview, getAdminProduct } from "../actions/productAction";
+import { getProduct, getProductDetails, createProduct, newReview, getAdminProduct, deleteProduct, updateProduct } from "../actions/productAction";
 
 // ✅ Initial states
 const initialStateProducts = {
@@ -29,6 +29,14 @@ const initialStateCreateProduct = {
   error: null,
   product: {},
 };
+
+const initialStateProduct = {
+  loading: false,
+  isDeleted: false,
+  isUpdated: false,
+  error: null,
+};
+
 
 // ✅ Product List Slice
 const productListSlice = createSlice({
@@ -155,14 +163,61 @@ const newReviewSlice = createSlice({
   },
 });
 
+const productSlice = createSlice({
+  name: "product",
+  initialState: initialStateProduct,
+  reducers: {
+    resetDeleteProduct: (state) => {
+      state.isDeleted = false;
+    },
+    resetUpdateProduct: (state) => {
+      state.isUpdated = false;
+    },
+    clearErrors: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // ✅ Delete product cases
+      .addCase(deleteProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isDeleted = action.payload;
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // ✅ Update product cases
+      .addCase(updateProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isUpdated = action.payload;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+
 // ✅ Export actions
 export const { clearErrors } = productListSlice.actions;
 export const { clearErrors: clearProductDetailsErrors } = productDetailsSlice.actions;
 export const { reset, clearErrors: clearNewReviewErrors } = newReviewSlice.actions;
 export const { reset: resetCreateProduct, clearErrors: clearCreateProductErrors } = createProductSlice.actions;
+export const { resetDeleteProduct, resetUpdateProduct,clearErrors: clearProductErrors } = productSlice.actions;
+
 
 // ✅ Export reducers separately for `configureStore`
 export const productListReducer = productListSlice.reducer;
 export const productDetailsReducer = productDetailsSlice.reducer;
 export const newReviewReducer = newReviewSlice.reducer; // ✅ Fixed export
 export const createProductReducer = createProductSlice.reducer;
+export const productReducer = productSlice.reducer;

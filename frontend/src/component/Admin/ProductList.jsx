@@ -9,8 +9,8 @@ import MetaData from "../layout/MetaData";
 import EditIcon from "@mui/icons-material/Edit"; // ✅ Updated MUI import
 import DeleteIcon from "@mui/icons-material/Delete";
 import SideBar from "./SideBar";
-import { clearErrors, getAdminProduct} from "../../actions/productAction"; // ✅ Import deleteProduct
-
+import { clearErrors, getAdminProduct, deleteProduct} from "../../actions/productAction"; // ✅ Import deleteProduct
+import { resetDeleteProduct } from "../../reducers/productReducer"
 const ProductList = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
@@ -18,12 +18,12 @@ const ProductList = () => {
 
   // ✅ Ensure correct state keys
   const { error, products } = useSelector((state) => state.productList); // `productList` should match `store.js`
-  // const { error: deleteError, isDeleted } = useSelector((state) => state.product);
+  const { error: deleteError, isDeleted } = useSelector((state) => state.product);
 
-  // ✅ Define deleteProductHandler
-  // const deleteProductHandler = (id) => {
-  //   dispatch(deleteProduct(id));
-  // };
+ // ✅ Define deleteProductHandler
+  const deleteProductHandler = (id) => {
+    dispatch(deleteProduct(id));
+  };
 
   useEffect(() => {
     if (error) {
@@ -31,19 +31,19 @@ const ProductList = () => {
       dispatch(clearErrors());
     }
 
-  //   if (deleteError) {
-  //     alert.error(deleteError);
-  //     dispatch(clearErrors());
-  //   }
+    if (deleteError) {
+      alert.error(deleteError);
+      dispatch(clearErrors());
+    }
 
-  //   if (isDeleted) {
-  //     alert.success("Product Deleted Successfully");
-  //     navigate("/admin/dashboard");
-  //     dispatch({ type: "DELETE_PRODUCT_RESET" }); // ✅ Reset delete state
-  //   }
+    if (isDeleted) {
+      alert.success("Product Deleted Successfully");
+      navigate("/admin/dashboard");
+      dispatch(resetDeleteProduct()); // ✅ Reset delete state
+    }
 
     dispatch(getAdminProduct());
-  }, [dispatch, alert, error]);
+  }, [dispatch, alert, error,deleteError, isDeleted, navigate]);
 
   // ✅ Fix renderCell to use `params.row.id`
   const columns = [
@@ -65,7 +65,7 @@ const ProductList = () => {
               <EditIcon />
             </Link>
 
-           <Button> {/* ✅ Fixed */}
+           <Button onClick={() => deleteProductHandler(params.row.id)}> {/* ✅ Fixed */}
               <DeleteIcon />
             </Button>
           </Fragment>
@@ -97,7 +97,7 @@ const ProductList = () => {
             pageSize={10}
             disableSelectionOnClick
             className="productListTable"
-            autoHeight
+            autoHeight 
           />
         </div>
       </div>

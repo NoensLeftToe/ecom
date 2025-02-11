@@ -32,7 +32,7 @@ import OrderDetails from "./component/Order/OrderDetails"
 import Dashboard from "./component/Admin/Dashboard"
 import ProductList from "./component/Admin/ProductList"
 import NewProduct from "./component/Admin/NewProduct"
-
+import UpdateProduct from "./component/Admin/UpdateProduct"
 
 function App() {
 
@@ -86,6 +86,8 @@ function App() {
               <Route isAdmin={true} path="/admin/dashboard" element={<Dashboard/>} />
               <Route isAdmin={true} path="/admin/products" element={<ProductList/>} />
               <Route isAdmin={true} path="/admin/product" element={<NewProduct/>} />
+             
+              <Route isAdmin={true} path="/admin/product/:id" element={<UpdateProduct/>} />
              
             </Route>
 

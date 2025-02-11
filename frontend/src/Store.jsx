@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { productListReducer, productDetailsReducer, newReviewReducer, createProductReducer } from "./reducers/productReducer"; // Import the updated product reducers
+import { productListReducer, productDetailsReducer, newReviewReducer, createProductReducer , productReducer} from "./reducers/productReducer"; // Import the updated product reducers
 import userReducer from "./reducers/UserReducer";
 import profileReducer from "./reducers/ProfileSlice";
 import forgotPasswordReducer from "./reducers/forgotPasswordReducer";
@@ -12,6 +12,8 @@ const store = configureStore({
     productDetails: productDetailsReducer, // ✅ Updated product details reducer
     newReview: newReviewReducer, // ✅ Added new review reducer
     createProduct: createProductReducer,
+    product : productReducer,
+
     
     user: userReducer,
     profile: profileReducer,
