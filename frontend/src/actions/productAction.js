@@ -78,6 +78,25 @@ export const getProductDetails = createAsyncThunk(
   }
 );
 
+
+
+export const createProduct = createAsyncThunk(
+  "createProduct/create",
+  async (productData, { rejectWithValue }) => {
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+
+      const { data } = await axios.post(`/api/v1/admin/product/new`, productData, config);
+      
+      return data; // { success: true, product: {...} }
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to create product");
+    }
+  }
+);
+
+
+
 // Async thunk for new review submission
 export const newReview = createAsyncThunk(
   "newReview/submit",
@@ -95,6 +114,18 @@ export const newReview = createAsyncThunk(
   }
 );
 
+
+export const getAdminProduct = createAsyncThunk(
+  "products/getAdminProduct",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get("/api/v1/admin/products");
+      return data.products; // Assuming API response contains { products: [...] }
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch admin products");
+    }
+  }
+);
 
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {

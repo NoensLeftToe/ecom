@@ -1,8 +1,7 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { getProduct, getProductDetails } from "../actions/productAction";
+import { createSlice } from "@reduxjs/toolkit";
+import { getProduct, getProductDetails, createProduct, newReview, getAdminProduct } from "../actions/productAction";
 
-// Initial state for product list
+// ✅ Initial states
 const initialStateProducts = {
   products: [],
   loading: false,
@@ -12,43 +11,31 @@ const initialStateProducts = {
   filteredProductsCount: 0,
 };
 
-// Initial state for product details
 const initialStateProductDetails = {
   product: {},
   loading: false,
   error: null,
 };
 
-// Initial state for new review
 const initialStateNewReview = {
   loading: false,
   success: false,
   error: null,
 };
 
-// ✅ New Review Async Action
-export const newReview = createAsyncThunk(
-  "newReview/submit",
-  async (reviewData, { rejectWithValue }) => {
-    try {
-      const config = {
-        headers: { "Content-Type": "application/json" },
-      };
-
-      const { data } = await axios.put(`/api/v1/review`, reviewData, config);
-      return data.success;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Review submission failed");
-    }
-  }
-);
+const initialStateCreateProduct = {
+  loading: false,
+  success: false,
+  error: null,
+  product: {},
+};
 
 // ✅ Product List Slice
 const productListSlice = createSlice({
   name: "productList",
   initialState: initialStateProducts,
   reducers: {
-    clearErrors(state) {
+    clearErrors: (state) => {
       state.error = null;
     },
   },
@@ -68,6 +55,19 @@ const productListSlice = createSlice({
       .addCase(getProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      .addCase(getAdminProduct.pending, (state) => {
+        state.loading = true;
+        state.products = [];
+      })
+      .addCase(getAdminProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = action.payload;
+      })
+      .addCase(getAdminProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
@@ -77,7 +77,7 @@ const productDetailsSlice = createSlice({
   name: "productDetails",
   initialState: initialStateProductDetails,
   reducers: {
-    clearErrors(state) {
+    clearErrors: (state) => {
       state.error = null;
     },
   },
@@ -98,8 +98,37 @@ const productDetailsSlice = createSlice({
   },
 });
 
-// ✅ New Review Reducer
-const newReviewReducer = createSlice({
+// ✅ Create Product Slice
+const createProductSlice = createSlice({
+  name: "createProduct",
+  initialState: initialStateCreateProduct,
+  reducers: {
+    reset: (state) => {
+      state.success = false;
+    },
+    clearErrors: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = action.payload.success;
+        state.product = action.payload.product;
+      })
+      .addCase(createProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+// ✅ New Review Slice (Fixed)
+const newReviewSlice = createSlice({
   name: "newReview",
   initialState: initialStateNewReview,
   reducers: {
@@ -129,9 +158,11 @@ const newReviewReducer = createSlice({
 // ✅ Export actions
 export const { clearErrors } = productListSlice.actions;
 export const { clearErrors: clearProductDetailsErrors } = productDetailsSlice.actions;
-export const { reset, clearErrors: clearNewReviewErrors } = newReviewReducer.actions;
+export const { reset, clearErrors: clearNewReviewErrors } = newReviewSlice.actions;
+export const { reset: resetCreateProduct, clearErrors: clearCreateProductErrors } = createProductSlice.actions;
 
 // ✅ Export reducers separately for `configureStore`
 export const productListReducer = productListSlice.reducer;
 export const productDetailsReducer = productDetailsSlice.reducer;
-export const newReviewReducerFunction = newReviewReducer.reducer;
+export const newReviewReducer = newReviewSlice.reducer; // ✅ Fixed export
+export const createProductReducer = createProductSlice.reducer;

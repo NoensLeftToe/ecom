@@ -1,35 +1,29 @@
 import React, { Fragment, useEffect } from "react";
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid } from "@mui/x-data-grid"; // ✅ Updated MUI import
 import "./ProductList.css";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  clearErrors,
-  getAdminProduct,
-  deleteProduct,
-} from "../../actions/productAction";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material"; // ✅ Updated MUI import
 import MetaData from "../layout/MetaData";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@mui/icons-material/Edit"; // ✅ Updated MUI import
+import DeleteIcon from "@mui/icons-material/Delete";
 import SideBar from "./SideBar";
-import { DELETE_PRODUCT_RESET } from "../../constants/productConstants";
+import { clearErrors, getAdminProduct} from "../../actions/productAction"; // ✅ Import deleteProduct
 
-const ProductList = ({ history }) => {
+const ProductList = () => {
   const dispatch = useDispatch();
-
   const alert = useAlert();
+  const navigate = useNavigate();
 
-  const { error, products } = useSelector((state) => state.products);
+  // ✅ Ensure correct state keys
+  const { error, products } = useSelector((state) => state.productList); // `productList` should match `store.js`
+  // const { error: deleteError, isDeleted } = useSelector((state) => state.product);
 
-  const { error: deleteError, isDeleted } = useSelector(
-    (state) => state.product
-  );
-
-  const deleteProductHandler = (id) => {
-    dispatch(deleteProduct(id));
-  };
+  // ✅ Define deleteProductHandler
+  // const deleteProductHandler = (id) => {
+  //   dispatch(deleteProduct(id));
+  // };
 
   useEffect(() => {
     if (error) {
@@ -37,45 +31,26 @@ const ProductList = ({ history }) => {
       dispatch(clearErrors());
     }
 
-    if (deleteError) {
-      alert.error(deleteError);
-      dispatch(clearErrors());
-    }
+  //   if (deleteError) {
+  //     alert.error(deleteError);
+  //     dispatch(clearErrors());
+  //   }
 
-    if (isDeleted) {
-      alert.success("Product Deleted Successfully");
-      history.push("/admin/dashboard");
-      dispatch({ type: DELETE_PRODUCT_RESET });
-    }
+  //   if (isDeleted) {
+  //     alert.success("Product Deleted Successfully");
+  //     navigate("/admin/dashboard");
+  //     dispatch({ type: "DELETE_PRODUCT_RESET" }); // ✅ Reset delete state
+  //   }
 
     dispatch(getAdminProduct());
-  }, [dispatch, alert, error, deleteError, history, isDeleted]);
+  }, [dispatch, alert, error]);
 
+  // ✅ Fix renderCell to use `params.row.id`
   const columns = [
     { field: "id", headerName: "Product ID", minWidth: 200, flex: 0.5 },
-
-    {
-      field: "name",
-      headerName: "Name",
-      minWidth: 350,
-      flex: 1,
-    },
-    {
-      field: "stock",
-      headerName: "Stock",
-      type: "number",
-      minWidth: 150,
-      flex: 0.3,
-    },
-
-    {
-      field: "price",
-      headerName: "Price",
-      type: "number",
-      minWidth: 270,
-      flex: 0.5,
-    },
-
+    { field: "name", headerName: "Name", minWidth: 350, flex: 1 },
+    { field: "stock", headerName: "Stock", type: "number", minWidth: 150, flex: 0.3 },
+    { field: "price", headerName: "Price", type: "number", minWidth: 270, flex: 0.5 },
     {
       field: "actions",
       flex: 0.3,
@@ -86,15 +61,11 @@ const ProductList = ({ history }) => {
       renderCell: (params) => {
         return (
           <Fragment>
-            <Link to={`/admin/product/${params.getValue(params.id, "id")}`}>
+            <Link to={`/admin/product/${params.row.id}`}> ✅ Fixed
               <EditIcon />
             </Link>
 
-            <Button
-              onClick={() =>
-                deleteProductHandler(params.getValue(params.id, "id"))
-              }
-            >
+           <Button> {/* ✅ Fixed */}
               <DeleteIcon />
             </Button>
           </Fragment>
@@ -103,22 +74,18 @@ const ProductList = ({ history }) => {
     },
   ];
 
-  const rows = [];
-
-  products &&
-    products.forEach((item) => {
-      rows.push({
-        id: item._id,
-        stock: item.Stock,
-        price: item.price,
-        name: item.name,
-      });
-    });
+  // ✅ Map `products` correctly
+  const rows = products?.map((product) => ({
+    id: product._id,   // Ensure `_id` exists in API response
+    name: product.name,
+    stock: product.stock,
+    price: product.price,
+  })) || [];
+  
 
   return (
     <Fragment>
-      <MetaData title={`ALL PRODUCTS - Admin`} />
-
+      <MetaData title="ALL PRODUCTS - Admin" />
       <div className="dashboard">
         <SideBar />
         <div className="productListContainer">

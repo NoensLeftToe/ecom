@@ -10,7 +10,7 @@ import Loader from "../layout/Loader/Loader";
 import { useAlert } from "react-alert";
 import MetaData from "../layout/MetaData";
 import { addItemsToCart } from "../../actions/cartAction";
-import { newReview, reset } from "../../reducers/productReducer"; // ✅ Import `reset` action from Redux Toolkit
+import { newReviewReducer, reset } from "../../reducers/productReducer"; // ✅ Import `reset` action from Redux Toolkit
 import {
   Dialog,
   DialogActions,

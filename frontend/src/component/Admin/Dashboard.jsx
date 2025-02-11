@@ -1,23 +1,27 @@
-import React, { useEffect } from "react";
-import Sidebar from "./SideBar";
+import React,{useEffect} from "react";
+import SideBar from "./SideBar";
 import "./Dashboard.css";
 import { Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { Doughnut, Line } from "react-chartjs-2";
-// import { useSelector, useDispatch } from "react-redux";
-// import { getAdminProduct } from "../../actions/productAction";
-// import { getAllOrders } from "../../actions/orderAction.js";
-// import { getAllUsers } from "../../actions/userAction.js";
+import {useSelector, useDispatch} from "react-redux"
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
 import MetaData from "../layout/MetaData";
+import {getAdminProduct} from "../../actions/productAction"
+//✅ Register all required Chart.js components for v6
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
 
 const Dashboard = () => {
-//   const dispatch = useDispatch();
 
-//   const { products } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
 
-//   const { orders } = useSelector((state) => state.allOrders);
+  const { products } = useSelector((state) => state.productList);
 
-//   const { users } = useSelector((state) => state.allUsers);
+  useEffect(() => {
+    dispatch(getAdminProduct());
+    // dispatch(getAllOrders());
+    // dispatch(getAllUsers());
+  }, [dispatch]);
 
   let outOfStock = 0;
 
@@ -28,37 +32,27 @@ const Dashboard = () => {
       }
     });
 
-//   useEffect(() => {
-//     dispatch(getAdminProduct());
-//     dispatch(getAllOrders());
-//     dispatch(getAllUsers());
-//   }, [dispatch]);
 
-//   let totalAmount = 0;
-//   orders &&
-//     orders.forEach((item) => {
-//       totalAmount += item.totalPrice;
-//     });
 
   const lineState = {
     labels: ["Initial Amount", "Amount Earned"],
     datasets: [
       {
         label: "TOTAL AMOUNT",
-        backgroundColor: ["tomato"],
-        hoverBackgroundColor: ["rgb(197, 72, 49)"],
-        data: [0, totalAmount],
+        backgroundColor: "tomato",
+        borderColor: "tomato",
+        data: [outOfStock, products.length - outOfStock],
       },
     ],
   };
 
   const doughnutState = {
-    labels: ["Out of Stock", "InStock"],
+    labels: ["Out of Stock", "In Stock"],
     datasets: [
       {
         backgroundColor: ["#00A6B4", "#6800B4"],
         hoverBackgroundColor: ["#4B5000", "#35014F"],
-        data: [outOfStock, products.length - outOfStock],
+        data: [2, 10],
       },
     ],
   };
@@ -66,7 +60,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <MetaData title="Dashboard - Admin Panel" />
-      <Sidebar />
+      <SideBar />
 
       <div className="dashboardContainer">
         <Typography component="h1">Dashboard</Typography>
@@ -74,7 +68,7 @@ const Dashboard = () => {
         <div className="dashboardSummary">
           <div>
             <p>
-              Total Amount <br /> ₹{totalAmount}
+              Total Amount <br /> $2000
             </p>
           </div>
           <div className="dashboardSummaryBox2">
@@ -84,11 +78,10 @@ const Dashboard = () => {
             </Link>
             <Link to="/admin/orders">
               <p>Orders</p>
-              <p>{orders && orders.length}</p>
+              <p>v</p> 
             </Link>
             <Link to="/admin/users">
               <p>Users</p>
-              <p>{users && users.length}</p>
             </Link>
           </div>
         </div>

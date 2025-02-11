@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { productListReducer, productDetailsReducer, newReviewReducerFunction } from "./reducers/productReducer"; // Import the updated product reducers
+import { productListReducer, productDetailsReducer, newReviewReducer, createProductReducer } from "./reducers/productReducer"; // Import the updated product reducers
 import userReducer from "./reducers/UserReducer";
 import profileReducer from "./reducers/ProfileSlice";
 import forgotPasswordReducer from "./reducers/forgotPasswordReducer";
@@ -10,8 +10,9 @@ const store = configureStore({
   reducer: {
     productList: productListReducer, // ✅ Updated product list reducer
     productDetails: productDetailsReducer, // ✅ Updated product details reducer
-    newReview: newReviewReducerFunction, // ✅ Added new review reducer
-
+    newReview: newReviewReducer, // ✅ Added new review reducer
+    createProduct: createProductReducer,
+    
     user: userReducer,
     profile: profileReducer,
     forgotPassword: forgotPasswordReducer,
