@@ -33,6 +33,8 @@ import Dashboard from "./component/Admin/Dashboard"
 import ProductList from "./component/Admin/ProductList"
 import NewProduct from "./component/Admin/NewProduct"
 import UpdateProduct from "./component/Admin/UpdateProduct"
+import OrderList from './component/Admin/OrderList';
+import ProcessOrder from './component/Admin/ProcessOrder';
 
 function App() {
 
@@ -88,6 +90,8 @@ function App() {
               <Route isAdmin={true} path="/admin/product" element={<NewProduct/>} />
              
               <Route isAdmin={true} path="/admin/product/:id" element={<UpdateProduct/>} />
+              <Route isAdmin={true} path="/admin/orders" element={<OrderList/>} />
+              <Route isAdmin={true} path="/admin/order/:id" element={<ProcessOrder/>} />
              
             </Route>
 

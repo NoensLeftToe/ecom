@@ -4,7 +4,7 @@ import userReducer from "./reducers/UserReducer";
 import profileReducer from "./reducers/ProfileSlice";
 import forgotPasswordReducer from "./reducers/forgotPasswordReducer";
 import cartReducer from "./reducers/cartReducer";
-import { newOrderReducer, myOrdersReducer, orderDetailsReducer } from "./reducers/orderReducer";
+import { newOrderReducer, myOrdersReducer, orderDetailsReducer, allOrdersReducer, orderReducer } from "./reducers/orderReducer";
 
 const store = configureStore({
   reducer: {
@@ -19,9 +19,12 @@ const store = configureStore({
     profile: profileReducer,
     forgotPassword: forgotPasswordReducer,
     cart: cartReducer,
+
     newOrder: newOrderReducer,
     myOrders: myOrdersReducer,
     orderDetails: orderDetailsReducer,
+    allOrders: allOrdersReducer,
+    order:orderReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });

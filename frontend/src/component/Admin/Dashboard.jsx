@@ -8,6 +8,7 @@ import {useSelector, useDispatch} from "react-redux"
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
 import MetaData from "../layout/MetaData";
 import {getAdminProduct} from "../../actions/productAction"
+// import{} from "../../reducers/productReducer"
 //✅ Register all required Chart.js components for v6
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
 
@@ -16,6 +17,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   const { products } = useSelector((state) => state.productList);
+  // const { orders } = useSelector((state) => state.allOrders);
 
   useEffect(() => {
     dispatch(getAdminProduct());
@@ -78,7 +80,7 @@ const Dashboard = () => {
             </Link>
             <Link to="/admin/orders">
               <p>Orders</p>
-              <p>v</p> 
+              {/* <p>{orders && orders.length}</p>  */}
             </Link>
             <Link to="/admin/users">
               <p>Users</p>
