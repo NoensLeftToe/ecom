@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProduct, getProductDetails, createProduct, newReview, getAdminProduct, deleteProduct, updateProduct } from "../actions/productAction";
+import { getProduct, getProductDetails, createProduct, newReview, getAdminProduct, deleteProduct, updateProduct, getAllReviews, deleteReviews } from "../actions/productAction";
 
 // ✅ Initial states
 const initialStateProducts = {
@@ -37,6 +37,19 @@ const initialStateProduct = {
   error: null,
 };
 
+// ✅ Initial State for Reviews
+const initialStateProductReviews = {
+  reviews: [],
+  loading: false,
+  error: null,
+};
+
+
+const initialStateReview = {
+  loading: false,
+  isDeleted: false,
+  error: null,
+};
 
 // ✅ Product List Slice
 const productListSlice = createSlice({
@@ -206,6 +219,60 @@ const productSlice = createSlice({
   },
 });
 
+const productReviewsSlice = createSlice({
+  name: "productReviews",
+  initialState: initialStateProductReviews,
+  reducers: {
+    clearErrors: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAllReviews.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllReviews.fulfilled, (state, action) => {
+        state.loading = false;
+        state.reviews = action.payload;
+      })
+      .addCase(getAllReviews.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+
+
+
+const reviewSlice = createSlice({
+  name: "review",
+  initialState: initialStateReview,
+  reducers: {
+    deleteReviewReset: (state) => {
+      state.isDeleted = false;
+    },
+    clearErrors: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(deleteReviews.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteReviews.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isDeleted = action.payload;
+      })
+      .addCase(deleteReviews.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
 
 // ✅ Export actions
 export const { clearErrors } = productListSlice.actions;
@@ -213,7 +280,7 @@ export const { clearErrors: clearProductDetailsErrors } = productDetailsSlice.ac
 export const { reset, clearErrors: clearNewReviewErrors } = newReviewSlice.actions;
 export const { reset: resetCreateProduct, clearErrors: clearCreateProductErrors } = createProductSlice.actions;
 export const { resetDeleteProduct, resetUpdateProduct,clearErrors: clearProductErrors } = productSlice.actions;
-
+export const { deleteReviewReset, clearErrors: clearReviewErrors } = reviewSlice.actions;
 
 // ✅ Export reducers separately for `configureStore`
 export const productListReducer = productListSlice.reducer;
@@ -221,3 +288,5 @@ export const productDetailsReducer = productDetailsSlice.reducer;
 export const newReviewReducer = newReviewSlice.reducer; // ✅ Fixed export
 export const createProductReducer = createProductSlice.reducer;
 export const productReducer = productSlice.reducer;
+export const productReviewsReducer = productReviewsSlice.reducer;
+export const reviewReducer = reviewSlice.reducer;

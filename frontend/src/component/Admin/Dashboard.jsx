@@ -8,6 +8,8 @@ import {useSelector, useDispatch} from "react-redux"
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
 import MetaData from "../layout/MetaData";
 import {getAdminProduct} from "../../actions/productAction"
+import {getAllOrders} from "../../actions/orderAction"
+import { getAllUsers} from "../../actions/userAction"
 // import{} from "../../reducers/productReducer"
 //✅ Register all required Chart.js components for v6
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
@@ -17,12 +19,13 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   const { products } = useSelector((state) => state.productList);
-  // const { orders } = useSelector((state) => state.allOrders);
+  const { orders } = useSelector((state) => state.allOrders);
+  const { users } = useSelector((state) => state.allUsers);
 
   useEffect(() => {
     dispatch(getAdminProduct());
-    // dispatch(getAllOrders());
-    // dispatch(getAllUsers());
+    dispatch(getAllOrders());
+    dispatch(getAllUsers());
   }, [dispatch]);
 
   let outOfStock = 0;
@@ -34,6 +37,11 @@ const Dashboard = () => {
       }
     });
 
+    let totalAmount = 0;
+  orders &&
+    orders.forEach((item) => {
+      totalAmount += item.totalPrice;
+    });
 
 
   const lineState = {
@@ -43,7 +51,7 @@ const Dashboard = () => {
         label: "TOTAL AMOUNT",
         backgroundColor: "tomato",
         borderColor: "tomato",
-        data: [outOfStock, products.length - outOfStock],
+        data: [0, totalAmount],
       },
     ],
   };
@@ -80,10 +88,11 @@ const Dashboard = () => {
             </Link>
             <Link to="/admin/orders">
               <p>Orders</p>
-              {/* <p>{orders && orders.length}</p>  */}
+               <p>{orders && orders.length}</p>  
             </Link>
             <Link to="/admin/users">
               <p>Users</p>
+              <p>{users && users.length}</p>
             </Link>
           </div>
         </div>

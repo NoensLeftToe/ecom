@@ -1,25 +1,44 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { login, register, loadUser, logout } from '../actions/userAction'; // Import logout action
+import { createSlice } from "@reduxjs/toolkit";
+import { login, register, loadUser, logout , forgotPassword, getAllUsers, getUserDetails} from "../actions/userAction";
 
-const initialState = {
+// ✅ Initial states
+const initialStateUser = {
   user: null,
   isAuthenticated: false,
   loading: false,
   error: null,
 };
 
+const initialStateForgotPassword = {
+  loading: false,
+  message: null,
+  success: null,
+  error: null,
+};
+
+const initialStateAllUsers = {
+  users: [],
+  loading: false,
+  error: null,
+};
+
+const initialStateUserDetails = {
+  user: {},
+  loading: false,
+  error: null,
+};
+
+// ✅ User Slice
 const userSlice = createSlice({
-  name: 'user',
-  initialState,
+  name: "user",
+  initialState: initialStateUser,
   reducers: {
-    // Custom reducer for clearing errors
     clearErrors: (state) => {
       state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Login actions
       .addCase(login.pending, (state) => {
         state.loading = true;
       })
@@ -34,7 +53,6 @@ const userSlice = createSlice({
         state.user = null;
         state.error = action.payload;
       })
-      // Register actions
       .addCase(register.pending, (state) => {
         state.loading = true;
       })
@@ -49,7 +67,6 @@ const userSlice = createSlice({
         state.user = null;
         state.error = action.payload;
       })
-      // Load user actions
       .addCase(loadUser.pending, (state) => {
         state.loading = true;
       })
@@ -64,7 +81,6 @@ const userSlice = createSlice({
         state.user = null;
         state.error = action.payload;
       })
-      // Logout actions
       .addCase(logout.fulfilled, (state) => {
         state.loading = false;
         state.user = null;
@@ -77,33 +93,90 @@ const userSlice = createSlice({
   },
 });
 
-const profileSlice = createSlice({
-  name: "profile",
-  initialState,
+// ✅ Forgot Password Slice
+const forgotPasswordSlice = createSlice({
+  name: "forgotPassword",
+  initialState: initialStateForgotPassword,
   reducers: {
     clearErrors: (state) => {
       state.error = null;
     },
-    resetUpdate: (state) => {
-      state.isUpdated = false;
-    },
   },
   extraReducers: (builder) => {
     builder
-      // Update Profile Actions
-      .addCase(updateProfile.pending, (state) => {
+      .addCase(forgotPassword.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
-      .addCase(updateProfile.fulfilled, (state, action) => {
+      .addCase(forgotPassword.fulfilled, (state, action) => {
         state.loading = false;
-        state.isUpdated = action.payload;
+        state.message = action.payload;
       })
-      .addCase(updateProfile.rejected, (state, action) => {
+      .addCase(forgotPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
-export const { clearErrors } = userSlice.actions;
 
-export default userSlice.reducer;
+// ✅ All Users Slice
+const allUsersSlice = createSlice({
+  name: "allUsers",
+  initialState: initialStateAllUsers,
+  reducers: {
+    clearErrors: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAllUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(getAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+// ✅ User Details Slice
+const userDetailsSlice = createSlice({
+  name: "userDetails",
+  initialState: initialStateUserDetails,
+  reducers: {
+    clearErrors: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getUserDetails.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUserDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(getUserDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+// ✅ Export actions
+export const { clearErrors } = userSlice.actions;
+export const { clearErrors: clearForgotPasswordErrors } = forgotPasswordSlice.actions;
+export const { clearErrors: clearAllUsersErrors } = allUsersSlice.actions;
+export const { clearErrors: clearUserDetailsErrors } = userDetailsSlice.actions;
+
+// ✅ Export reducers separately for `configureStore`
+export const userReducer = userSlice.reducer;
+export const forgotPasswordReducer = forgotPasswordSlice.reducer;
+export const allUsersReducer = allUsersSlice.reducer;
+export const userDetailsReducer = userDetailsSlice.reducer;

@@ -1,3 +1,88 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  position: fixed; /* Makes it stay at the top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Ensures it stays on top */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 4rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.nav-list {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-weight: 500;
+  color: #555;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #000;
+  font-weight: bold;
+  background: white;
+}
+
+/* Active indicator effect */
+.nav-item::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4px;
+  background: #000;
+  transition: width 0.3s ease-in-out;
+}
+
+.nav-item:hover::after,
+.nav-link.active + .nav-item::after {
+  width: 50%;
+}
+
+/* Prevent content from being hidden under the fixed header */
+body {
+  padding-top: 5rem; /* Adjust based on header height */
+}
+
+
 .speedDial {
     position: fixed;
     right: 3vmax;
@@ -9,3 +94,5 @@
     height: 56px;
     border-radius: 100%;
   }
+
+  

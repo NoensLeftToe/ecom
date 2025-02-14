@@ -4,13 +4,13 @@ import "./ProductDetails.css";
 import { useSelector, useDispatch } from "react-redux";
 import { clearErrors, getProductDetails } from "../../actions/productAction";
 import { useParams } from "react-router-dom";
-import { Rating } from "@mui/material"; // ✅ Fixed Import
+import { Rating } from "@mui/material";
 import ReviewCard from "./ReviewCard";
 import Loader from "../layout/Loader/Loader";
 import { useAlert } from "react-alert";
 import MetaData from "../layout/MetaData";
 import { addItemsToCart } from "../../actions/cartAction";
-import { newReviewReducer, reset } from "../../reducers/productReducer"; // ✅ Import `reset` action from Redux Toolkit
+import { newReviewReducer, reset } from "../../reducers/productReducer"; 
 import {
   Dialog,
   DialogActions,
@@ -45,7 +45,7 @@ const ProductDetails = () => {
 
     if (success) {
       alert.success("Review Submitted Successfully");
-      dispatch(reset()); // ✅ Reset success state using Redux Toolkit action
+      dispatch(reset());
     }
 
     dispatch(getProductDetails(id));
@@ -88,7 +88,7 @@ const ProductDetails = () => {
     myForm.set("comment", comment);
     myForm.set("productId", id);
 
-    dispatch(newReview(myForm)); // ✅ Dispatching review action
+    dispatch(newReview(myForm));
     setOpen(false);
   };
 
@@ -101,21 +101,20 @@ const ProductDetails = () => {
           <MetaData title={`${product.name} - 1-STOP`} />
           <div className="ProductDetails">
             <div>
-            <Carousel>
-             {product.images && product.images.length > 0 ? (
-             product.images.map((item, i) => (
-              <img
-               className="CarouselImage"
-                key={i}
-                 src={item.url}
-                 alt={`${i} Slide`}
-              />
-    ))
-  ) : (
-    <img className="CarouselImage" src="/default-image.jpg" alt="No Image" />
-  )}
-</Carousel>
-
+              <Carousel autoPlay={true} animation="slide">
+                {product.images && product.images.length > 0 ? (
+                  product.images.map((item, i) => (
+                    <img
+                      className="CarouselImage"
+                      key={i}
+                      src={item.url}
+                      alt={`${i} Slide`}
+                    />
+                  ))
+                ) : (
+                  <img className="CarouselImage" src="/default-image.jpg" alt="No Image" />
+                )}
+              </Carousel>
             </div>
             <div>
               <div className="detailsBlock-1">
@@ -195,16 +194,6 @@ const ProductDetails = () => {
               </Button>
             </DialogActions>
           </Dialog>
-
-          {product.reviews && product.reviews.length > 0 ? (
-            <div className="reviews">
-              {product.reviews.map((review) => (
-                <ReviewCard key={review._id} review={review} />
-              ))}
-            </div>
-          ) : (
-            <p className="noReviews">No Reviews Yet</p>
-          )}
         </Fragment>
       )}
     </Fragment>

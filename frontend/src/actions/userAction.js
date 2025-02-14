@@ -118,6 +118,58 @@ export const resetPassword = createAsyncThunk(
     }
   }
 );
+// Get All Users (Admin)
+export const getAllUsers = createAsyncThunk(
+  "admin/getAllUsers",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`/api/v1/admin/users`);
+      return data.users;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch users");
+    }
+  }
+);
+
+// Get User Details (Admin)
+export const getUserDetails = createAsyncThunk("user/getDetails", async (id, { rejectWithValue }) => {
+  try {
+    const { data } = await axios.get(`/api/v1/admin/user/${id}`);
+    return data.user;
+  } catch (error) {
+    console.log(error.response?.data?.message); // ❌ Remove this if present
+    return rejectWithValue(error.response?.data?.message);
+  }
+});
+
+// Update User (Admin)
+export const updateUser = createAsyncThunk(
+  "admin/updateUser",
+  async ({ id, userData }, { rejectWithValue }) => {
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.put(`/api/v1/admin/user/${id}`, userData, config);
+      return data.success;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to update user");
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  "admin/deleteUser",
+  async (id, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.delete(`/api/v1/admin/user/${id}`);
+      console.log("Delete API response:", data);  // 🔍 Check this in console
+      return data;
+    } catch (error) {
+      console.error("Delete API error:", error.response?.data);
+      return rejectWithValue(error.response?.data?.message || "Failed to delete user");
+    }
+  }
+);
+
 
 
 

@@ -75,13 +75,23 @@ const Home = () => {
 
           {/* Pagination Controls */}
           <div className="pagination">
-            <button onClick={handlePrevPage} disabled={currentPage === 1}>
-              Previous
-            </button>
-            <button onClick={handleNextPage}>
-              Next
-            </button>
-          </div>
+  <button 
+    onClick={handlePrevPage} 
+    disabled={currentPage === 1}
+    className="pagination-btn prev"
+  >
+    ◀ Prev
+  </button>
+  
+  <span className="page-number">{currentPage}</span>
+
+  <button 
+    onClick={handleNextPage} 
+    className="pagination-btn next"
+  >
+    Next ▶
+  </button>
+</div>
         </Fragment>
       )}
     </Fragment>

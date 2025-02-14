@@ -35,6 +35,10 @@ import NewProduct from "./component/Admin/NewProduct"
 import UpdateProduct from "./component/Admin/UpdateProduct"
 import OrderList from './component/Admin/OrderList';
 import ProcessOrder from './component/Admin/ProcessOrder';
+import UsersList from './component/Admin/UsersList';
+import UpdateUser from "./component/Admin/UpdateUser";
+import ProductReviews from "./component/Admin/ProductReviews"
+import NotFound from "./component/layout/NotFound/NotFound"
 
 function App() {
 
@@ -46,6 +50,7 @@ function App() {
     setStripeApiKey(data.stripeApiKey);
   }
 
+
   useEffect(() => {
     WebFont.load({
       google: {
@@ -56,6 +61,8 @@ function App() {
     store.dispatch(loadUser());
     getStripeApiKey();
   }, []);
+
+  window.addEventListener("contextmenu", (e) => e.preventDefault());
 
   return (
     <Router>
@@ -92,6 +99,9 @@ function App() {
               <Route isAdmin={true} path="/admin/product/:id" element={<UpdateProduct/>} />
               <Route isAdmin={true} path="/admin/orders" element={<OrderList/>} />
               <Route isAdmin={true} path="/admin/order/:id" element={<ProcessOrder/>} />
+              <Route isAdmin={true} path="/admin/users" element={<UsersList/>} />
+              <Route isAdmin={true} path="/admin/user/:id" element={<UpdateUser/>} />
+              <Route isAdmin={true} path="/admin/reviews" element={<ProductReviews/>} />
              
             </Route>
 
@@ -99,8 +109,9 @@ function App() {
             <Route path="/password/reset/:token" element={<ResetPassword />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/login" element={<LoginSignUp />} />
+            <Route path="*" element={window.location.pathname === "/process/payment" ? null : <NotFound />} />
           </Routes>
-        </Elements>
+      </Elements>
       )}
       
       <Footer />

@@ -1,109 +1,155 @@
 .orderDetailsPage {
-    background-color: white;
-  }
-  
-  .orderDetailsContainer > h1 {
-    font: 300 3vmax "Roboto";
-    margin: 4vmax 0;
-    color: tomato;
-  }
-  
+  background-color: #f5f5f5; /* Light grey background */
+  min-height: 100vh;
+  padding: 3vmax 0;
+}
+
+.orderDetailsContainer {
+  background-color: #ffffff; /* White card-like section */
+  padding: 4vmax;
+  margin: auto;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.orderDetailsContainer > h1 {
+  font: 400 2.5vmax "Roboto";
+  color: #333;
+  text-align: center;
+  margin-bottom: 2vmax;
+}
+
+.orderDetailsContainer > p {
+  font: 400 1.6vmax "Roboto";
+  color: #555;
+  text-align: center;
+}
+
+.orderDetailsContainerBox {
+  margin: 2vmax 0;
+  padding: 2vmax;
+  background: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.orderDetailsContainerBox > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1vmax 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.orderDetailsContainerBox > div:last-child {
+  border-bottom: none;
+}
+
+.orderDetailsContainerBox > div > p {
+  font: 400 1.2vmax "Roboto";
+  color: #444;
+}
+
+.orderDetailsContainerBox > div > span {
+  font: 300 1.2vmax "Roboto";
+  color: #777;
+}
+
+.orderDetailsCartItems {
+  padding-top: 2vmax;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.orderDetailsCartItems > p {
+  font: 400 1.8vmax "Roboto";
+  color: #444;
+  text-align: center;
+}
+
+.orderDetailsCartItemsContainer {
+  margin-top: 2vmax;
+}
+
+.orderDetailsCartItemsContainer > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5vmax;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.orderDetailsCartItemsContainer > div:not(:last-child) {
+  margin-bottom: 1vmax;
+}
+
+.orderDetailsCartItemsContainer > div > img {
+  width: 4vmax;
+  border-radius: 6px;
+}
+
+.orderDetailsCartItemsContainer > div > a {
+  flex: 1;
+  margin: 0 2vmax;
+  font: 400 1.2vmax "Roboto";
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.orderDetailsCartItemsContainer > div > a:hover {
+  color: #eb4034;
+}
+
+.orderDetailsCartItemsContainer > div > span {
+  font: 300 1.2vmax "Roboto";
+  color: #777;
+}
+
+/* 🔹 Responsive Design */
+@media screen and (max-width: 600px) {
   .orderDetailsContainer {
-    padding: 5vmax;
-    padding-bottom: 0%;
+      padding: 3vmax;
+      width: 95%;
   }
-  
+
+  .orderDetailsContainer > h1 {
+      font-size: 5vw;
+  }
+
   .orderDetailsContainer > p {
-    font: 400 1.8vmax "Roboto";
+      font-size: 4vw;
   }
-  
-  .orderDetailsContainerBox,
-  .orderDetailsCartItemsContainer {
-    margin: 2vmax;
-  }
-  
-  .orderDetailsContainerBox > div {
-    display: flex;
-    margin: 1vmax 0;
-  }
-  
-  .orderDetailsContainerBox > div > p {
-    font: 400 1vmax "Roboto";
-    color: black;
-  }
+
+  .orderDetailsContainerBox > div > p,
   .orderDetailsContainerBox > div > span {
-    margin: 0 1vmax;
-    font: 100 1vmax "Roboto";
-    color: #575757;
+      font-size: 3.5vw;
   }
-  
+
   .orderDetailsCartItems > p {
-    font: 400 1.8vmax "Roboto";
+      font-size: 4.5vw;
   }
-  
-  .orderDetailsCartItems {
-    padding: 2vmax 5vmax;
-    border-top: 1px solid rgba(0, 0, 0, 0.164);
-  }
-  
+
   .orderDetailsCartItemsContainer > div {
-    display: flex;
-    font: 400 1vmax "Roboto";
-    align-items: center;
-    margin: 2vmax 0;
+      flex-direction: column;
+      text-align: center;
+      padding: 2.5vw;
   }
-  
+
   .orderDetailsCartItemsContainer > div > img {
-    width: 3vmax;
+      width: 12vw;
+      margin-bottom: 1vw;
   }
-  
+
   .orderDetailsCartItemsContainer > div > a {
-    color: #575757;
-    margin: 0 2vmax;
-    width: 60%;
-    text-decoration: none;
+      margin: 2vw 0;
+      font-size: 3.5vw;
   }
-  
+
   .orderDetailsCartItemsContainer > div > span {
-    font: 100 1vmax "Roboto";
-    color: #5e5e5e;
+      font-size: 3vw;
   }
-  
-  @media screen and (max-width: 600px) {
-    .orderDetailsContainer > p {
-      font: 400 6vw "Roboto";
-    }
-  
-    .orderDetailsContainerBox > div {
-      margin: 6vw 0;
-    }
-  
-    .orderDetailsContainerBox > div > p {
-      font: 400 4vw "Roboto";
-    }
-    .orderDetailsContainerBox > div > span {
-      font: 100 4vw "Roboto";
-    }
-  
-    .orderDetailsCartItems > p {
-      font: 400 6vw "Roboto";
-    }
-  
-    .orderDetailsCartItemsContainer > div {
-      font: 400 4vw "Roboto";
-      margin: 4vw 0;
-    }
-  
-    .orderDetailsCartItemsContainer > div > img {
-      width: 10vw;
-    }
-  
-    .orderDetailsCartItemsContainer > div > a {
-      margin: 2vw;
-      width: 30%;
-    }
-  
-    .orderDetailsCartItemsContainer > div > span {
-      font: 100 4vw "Roboto";
-    }
-  }
+}

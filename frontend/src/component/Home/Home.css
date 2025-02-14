@@ -1,5 +1,5 @@
 .banner {
-    background-image: url("../../images/bg.jpg");
+    background-image: url("../../images/fudge.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -140,3 +140,32 @@
       font: 300 1vmax "Roboto";
     }
   }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1rem;
+  }
+  
+  .pagination-btn {
+    background: black;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .pagination-btn:active {
+    background: gray; /* Turns gray when clicked */
+  }
+  
+  .pagination-btn:disabled {
+    background: rgb(80, 80, 80); /* Dark gray when disabled */
+    cursor: not-allowed;
+  }
+  

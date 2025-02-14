@@ -1,11 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { updateProfile, updatePassword } from "../actions/userAction"; // Import actions
+import { updateProfile, updatePassword, updateUser, deleteUser } from "../actions/userAction"; // Import async actions
 
 const initialState = {
+  user: null,
+  isAuthenticated: false,
   loading: false,
-  isUpdated: false,  // For profile update
-  isPasswordUpdated: false,  // For password update
   error: null,
+  isUpdated: false,
+  isDeleted: false,
+  message: null,
 };
 
 const profileSlice = createSlice({
@@ -17,7 +20,9 @@ const profileSlice = createSlice({
     },
     resetUpdate: (state) => {
       state.isUpdated = false;
-      state.isPasswordUpdated = false;  // Reset password update state
+    },
+    resetDelete: (state) => {
+      state.isDeleted = false;
     },
   },
   extraReducers: (builder) => {
@@ -28,7 +33,7 @@ const profileSlice = createSlice({
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.isUpdated = action.payload;  // Set profile update status
+        state.isUpdated = action.payload;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
@@ -41,16 +46,41 @@ const profileSlice = createSlice({
       })
       .addCase(updatePassword.fulfilled, (state, action) => {
         state.loading = false;
-        state.isPasswordUpdated = action.payload;  // Set password update status
+        state.isUpdated = action.payload;
       })
       .addCase(updatePassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Update User Actions (Admin)
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isUpdated = action.payload;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Delete User Actions
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isDeleted = action.payload.success;
+        state.message = action.payload.message;
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-
-
-export const { clearErrors, resetUpdate } = profileSlice.actions;
+export const { clearErrors, resetUpdate, resetDelete } = profileSlice.actions;
 export default profileSlice.reducer;
