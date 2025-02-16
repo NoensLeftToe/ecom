@@ -4,20 +4,13 @@ import "./ProductDetails.css";
 import { useSelector, useDispatch } from "react-redux";
 import { clearErrors, getProductDetails } from "../../actions/productAction";
 import { useParams } from "react-router-dom";
-import { Rating } from "@mui/material";
+import { Rating, Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material"; // ✅ MUI v5 Fix
 import ReviewCard from "./ReviewCard";
 import Loader from "../layout/Loader/Loader";
 import { useAlert } from "react-alert";
 import MetaData from "../layout/MetaData";
 import { addItemsToCart } from "../../actions/cartAction";
 import { newReviewReducer, reset } from "../../reducers/productReducer"; 
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Button,
-} from "@material-ui/core";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -101,7 +94,7 @@ const ProductDetails = () => {
           <MetaData title={`${product.name} - 1-STOP`} />
           <div className="ProductDetails">
             <div>
-              <Carousel autoPlay={true} animation="slide">
+              <Carousel autoPlay animation="slide">
                 {product.images && product.images.length > 0 ? (
                   product.images.map((item, i) => (
                     <img

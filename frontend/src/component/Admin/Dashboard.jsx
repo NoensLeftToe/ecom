@@ -1,7 +1,7 @@
 import React,{useEffect} from "react";
 import SideBar from "./SideBar";
 import "./Dashboard.css";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Doughnut, Line } from "react-chartjs-2";
 import {useSelector, useDispatch} from "react-redux"
@@ -11,7 +11,7 @@ import {getAdminProduct} from "../../actions/productAction"
 import {getAllOrders} from "../../actions/orderAction"
 import { getAllUsers} from "../../actions/userAction"
 // import{} from "../../reducers/productReducer"
-//✅ Register all required Chart.js components for v6
+//✅ Register all required Chart.js components for v
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
 
 const Dashboard = () => {

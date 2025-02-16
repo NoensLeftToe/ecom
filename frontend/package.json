@@ -12,10 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/data-grid": "^0.1.67",
-    "@material-ui/icons": "^4.11.3",
-    "@mui/icons-material": "^6.4.1",
+    "@mui/icons-material": "^6.4.4",
     "@mui/lab": "^6.0.0-beta.24",
     "@mui/material": "^5.16.14",
     "@mui/styles": "^6.4.1",

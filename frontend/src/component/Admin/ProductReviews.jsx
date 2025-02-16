@@ -1,16 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import "./ProductReviews.css";
 import { useSelector, useDispatch } from "react-redux";
-import { clearErrors, getAllReviews, deleteReviews } from "../../actions/productAction";
 import { useAlert } from "react-alert";
-import { Button } from "@material-ui/core";
-import MetaData from "../layout/MetaData";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Star from "@material-ui/icons/Star";
-import SideBar from "./SideBar";
 import { useNavigate } from "react-router-dom";
-import {deleteReviewReset} from "../../reducers/productReducer"
+import { Button } from "@mui/material";
+import { clearErrors, getAllReviews, deleteReviews } from "../../actions/productAction";
+import { deleteReviewReset } from "../../reducers/productReducer";
+import MetaData from "../layout/MetaData";
+import DeleteIcon from "@mui/icons-material/Delete";
+import StarIcon from "@mui/icons-material/Star"; // ✅ Changed from @material-ui/icons
+import SideBar from "./SideBar";
+import "./ProductReviews.css";
 
 const ProductReviews = () => {
   const dispatch = useDispatch();
@@ -106,7 +106,7 @@ const ProductReviews = () => {
           <form className="productReviewsForm" onSubmit={productReviewsSubmitHandler}>
             <h1 className="productReviewsFormHeading">ALL REVIEWS</h1>
             <div>
-              <Star />
+              <StarIcon />
               <input
                 type="text"
                 placeholder="Product Id"

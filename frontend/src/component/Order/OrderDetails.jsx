@@ -3,13 +3,13 @@ import "./OrderDetails.css";
 import { useSelector, useDispatch } from "react-redux";
 import MetaData from "../layout/MetaData";
 import { Link, useParams } from "react-router-dom"; // ✅ Updated for v6
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material"; // ✅ Updated for MUI v5
 import { getOrderDetails, clearErrors } from "../../actions/orderAction";
 import Loader from "../layout/Loader/Loader";
 import { useAlert } from "react-alert";
 
 const OrderDetails = () => {
-  const { id } = useParams(); // ✅ Use useParams instead of match.params.id
+  const { id } = useParams(); // ✅ React Router v6
   const dispatch = useDispatch();
   const alert = useAlert();
 
@@ -34,7 +34,7 @@ const OrderDetails = () => {
             <div className="orderDetailsContainer">
               <Typography component="h1">Order #{order?._id}</Typography>
 
-              <Typography>Shipping Info</Typography>
+              <Typography variant="h6">Shipping Info</Typography>
               <div className="orderDetailsContainerBox">
                 <div>
                   <p>Name:</p>
@@ -54,7 +54,7 @@ const OrderDetails = () => {
                 </div>
               </div>
 
-              <Typography>Payment</Typography>
+              <Typography variant="h6">Payment</Typography>
               <div className="orderDetailsContainerBox">
                 <div>
                   <p
@@ -75,7 +75,7 @@ const OrderDetails = () => {
                 </div>
               </div>
 
-              <Typography>Order Status</Typography>
+              <Typography variant="h6">Order Status</Typography>
               <div className="orderDetailsContainerBox">
                 <div>
                   <p
@@ -92,7 +92,7 @@ const OrderDetails = () => {
             </div>
 
             <div className="orderDetailsCartItems">
-              <Typography>Order Items:</Typography>
+              <Typography variant="h6">Order Items:</Typography>
               <div className="orderDetailsCartItemsContainer">
                 {order?.orderItems?.length > 0 ? (
                   order.orderItems.map((item) => (

@@ -1,11 +1,11 @@
-import React,{Fragment} from 'react'
+import React, { Fragment } from "react";
 import "./Cart.css";
 import CartItemCard from "./CartItemCard";
 import { useSelector, useDispatch } from "react-redux";
 import { addItemsToCart, removeItemsFromCart } from "../../actions/cartAction";
-import { Typography } from "@material-ui/core";
-import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
-import { Link, useNavigate} from "react-router-dom";
+import { Typography } from "@mui/material";
+import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart"; // ✅ Updated to MUI v5
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
     const dispatch = useDispatch();

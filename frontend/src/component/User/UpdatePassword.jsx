@@ -2,15 +2,14 @@ import React, { Fragment, useState, useEffect } from "react";
 import "./UpdatePassword.css";
 import Loader from "../layout/Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, updatePassword } from "../../actions/userAction"; // Use profileAction.js for updatePassword
+import { clearErrors, updatePassword } from "../../actions/userAction"; // ✅ Ensure correct import
 import { useAlert } from "react-alert";
-import { useNavigate } from "react-router-dom"; // Replaced history with useNavigate
+import { useNavigate } from "react-router-dom";
 import MetaData from "../layout/MetaData";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import LockIcon from "@material-ui/icons/Lock";
-import { resetUpdate } from "../../reducers/ProfileSlice"
-import VpnKeyIcon from "@material-ui/icons/VpnKey";
-
+import LockOpenIcon from "@mui/icons-material/LockOpen"; // ✅ Fixed import
+import LockIcon from "@mui/icons-material/Lock"; // ✅ Fixed import
+import { resetUpdate } from "../../reducers/ProfileSlice";
+import VpnKeyIcon from "@mui/icons-material/VpnKey"; //
 const UpdatePassword = () => {
   const dispatch = useDispatch();
   const alert = useAlert();

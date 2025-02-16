@@ -6,10 +6,9 @@ import { clearErrors, resetPassword } from "../../actions/userAction"; // ✅ En
 import { useAlert } from "react-alert";
 import { useParams, useNavigate } from "react-router-dom"; // ✅ Import useParams for token extraction
 import MetaData from "../layout/MetaData";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import LockIcon from "@material-ui/icons/Lock";
-import { resetUpdate } from "../../reducers/ProfileSlice"; // ✅ Ensure resetUpdate is imported
-
+import LockOpenIcon from "@mui/icons-material/LockOpen"; // ✅ Updated to MUI v5
+import LockIcon from "@mui/icons-material/Lock"; // ✅ Updated to MUI v5
+import { resetUpdate } from "../../reducers/ProfileSlice"; 
 
 const ResetPassword = () => {
   const dispatch = useDispatch();

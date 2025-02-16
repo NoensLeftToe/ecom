@@ -3,16 +3,17 @@ import "./Shipping.css";
 import { useSelector, useDispatch } from "react-redux";
 import { saveShippingInfo } from "../../actions/cartAction";
 import MetaData from "../layout/MetaData";
-import PinDropIcon from "@material-ui/icons/PinDrop";
-import HomeIcon from "@material-ui/icons/Home";
-import LocationCityIcon from "@material-ui/icons/LocationCity";
-import PublicIcon from "@material-ui/icons/Public";
-import PhoneIcon from "@material-ui/icons/Phone";
-import TransferWithinAStationIcon from "@material-ui/icons/TransferWithinAStation";
+import PinDropIcon from "@mui/icons-material/PinDrop"; // ✅ Fixed import
+import HomeIcon from "@mui/icons-material/Home"; // ✅ Fixed import
+import LocationCityIcon from "@mui/icons-material/LocationCity"; // ✅ Fixed import
+import PublicIcon from "@mui/icons-material/Public"; // ✅ Fixed import
+import PhoneIcon from "@mui/icons-material/Phone"; // ✅ Fixed import
+import TransferWithinAStationIcon from "@mui/icons-material/TransferWithinAStation"; // ✅ Fixed import
 import { Country, State } from "country-state-city";
 import { useAlert } from "react-alert";
 import CheckoutSteps from "../Cart/CheckoutSteps";
-import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
+import { useNavigate } from "react-router-dom";
+
 
 const Shipping = () => {
   const dispatch = useDispatch();

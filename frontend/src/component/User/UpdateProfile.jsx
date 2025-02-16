@@ -2,8 +2,8 @@ import React, { Fragment, useRef, useState, useEffect } from 'react';
 import "./UpdateProfile.css";
 import Loader from "../layout/Loader/Loader";
 import { Link } from "react-router-dom";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import FaceIcon from "@material-ui/icons/Face";
+import MailOutlineIcon from "@mui/icons-material/MailOutline"; // ✅ Fixed import
+import FaceIcon from "@mui/icons-material/Face";
 import{ useDispatch, useSelector} from "react-redux";
 import { clearErrors, updateProfile, loadUser} from '../../actions/userAction';
 import{useAlert} from "react-alert";
