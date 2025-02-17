@@ -10,5 +10,18 @@ export default defineConfig({
     proxy: {
       '/api': 'http://192.168.100.7:4000', // Adjust this to your backend API server's URL
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Group dependencies into separate chunks (e.g., node_modules packages into their own chunk)
+          if (id.includes('node_modules')) {
+            return id.split('node_modules/')[1].split('/')[0]; // Creates chunks based on package name
+          }
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,  // Increase the chunk size warning limit (1MB)
   }
 })
