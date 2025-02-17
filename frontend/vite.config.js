@@ -22,9 +22,17 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Group dependencies into separate chunks (e.g., node_modules packages into their own chunk)
+          // Prevent empty chunks by grouping only useful dependencies
           if (id.includes('node_modules')) {
-            return id.split('node_modules/')[1].split('/')[0]; // Creates chunks based on package name
+            const packageName = id.split('node_modules/')[1].split('/')[0];
+            // Only chunk larger or frequently used packages
+            if (packageName === 'react' || packageName === 'react-dom') {
+              return 'react';
+            }
+            if (packageName === 'axios' || packageName === 'redux') {
+              return 'vendor';
+            }
+            return null; // Prevent unnecessary chunking for unused or small packages
           }
         }
       }
