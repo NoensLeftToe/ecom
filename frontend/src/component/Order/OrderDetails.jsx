@@ -6,22 +6,21 @@ import { Link, useParams } from "react-router-dom"; // ✅ Updated for v6
 import { Typography } from "@mui/material"; // ✅ Updated for MUI v5
 import { getOrderDetails, clearErrors } from "../../actions/orderAction";
 import Loader from "../layout/Loader/Loader";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
 
 const OrderDetails = () => {
   const { id } = useParams(); // ✅ React Router v6
   const dispatch = useDispatch();
-  const alert = useAlert();
 
   const { order, error, loading } = useSelector((state) => state.orderDetails);
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error); // ✅ Replace alert.error with toast.error
       dispatch(clearErrors());
     }
     dispatch(getOrderDetails(id));
-  }, [dispatch, alert, error, id]);
+  }, [dispatch, error, id]);
 
   return (
     <Fragment>

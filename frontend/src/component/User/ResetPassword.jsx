@@ -2,17 +2,16 @@ import React, { Fragment, useState, useEffect } from "react";
 import "./ResetPassword.css";
 import Loader from "../layout/Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, resetPassword } from "../../actions/userAction"; // ✅ Ensure resetPassword is imported
-import { useAlert } from "react-alert";
+import { clearErrors, resetPassword } from "../../actions/userAction"; 
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
 import { useParams, useNavigate } from "react-router-dom"; // ✅ Import useParams for token extraction
 import MetaData from "../layout/MetaData";
-import LockOpenIcon from "@mui/icons-material/LockOpen"; // ✅ Updated to MUI v5
-import LockIcon from "@mui/icons-material/Lock"; // ✅ Updated to MUI v5
+import LockOpenIcon from "@mui/icons-material/LockOpen"; 
+import LockIcon from "@mui/icons-material/Lock"; 
 import { resetUpdate } from "../../reducers/ProfileSlice"; 
 
 const ResetPassword = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
   const navigate = useNavigate(); // ✅ Replacing history with useNavigate
   const { token } = useParams(); // ✅ Extract token from URL
 
@@ -34,16 +33,16 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error); // ✅ Replaced alert.error with toast.error
       dispatch(clearErrors());
     }
 
     if (success) {
-      alert.success("Password Updated Successfully");
+      toast.success("Password Updated Successfully"); // ✅ Replaced alert.success with toast.success
       dispatch(resetUpdate()); // ✅ Reset Redux state
       navigate("/login"); // ✅ Navigate after success
     }
-  }, [dispatch, error, alert, success, navigate]); // ✅ Replace history with navigate
+  }, [dispatch, error, success, navigate]); // ✅ Remove alert and replace with navigate
 
   return (
     <Fragment>

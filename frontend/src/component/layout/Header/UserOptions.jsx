@@ -8,14 +8,13 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
 import { logout } from "../../../actions/userAction";
 
 const UserOptions = ({ user }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const alert = useAlert();
 
   function goToDashboard() {
     navigate("/admin/dashboard");
@@ -35,7 +34,7 @@ const UserOptions = ({ user }) => {
 
   function logoutUser() {
     dispatch(logout());
-    alert.success("Logout Successfully");
+    toast.success("Logout Successfully"); // ✅ Replace useAlert with toast.success
   }
 
   const options = [

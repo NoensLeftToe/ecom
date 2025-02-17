@@ -5,11 +5,10 @@ import MetaData from "../layout/MetaData";
 import { getProduct, clearErrors } from "../../actions/productAction";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../layout/Loader/Loader";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
 import ProductCard from "./ProductCard";
 
 const Home = () => {
-  const alert = useAlert();
   const dispatch = useDispatch();
 
   // Accessing the productList state
@@ -21,13 +20,13 @@ const Home = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error); // ✅ Use toast.error
       dispatch(clearErrors());
     }
 
     // Fetch products whenever the current page changes
     dispatch(getProduct({ currentPage }));
-  }, [dispatch, error, alert, currentPage]);
+  }, [dispatch, error, currentPage]);
 
   const handleNextPage = () => {
     setCurrentPage((prev) => prev + 1);
@@ -75,23 +74,23 @@ const Home = () => {
 
           {/* Pagination Controls */}
           <div className="pagination">
-  <button 
-    onClick={handlePrevPage} 
-    disabled={currentPage === 1}
-    className="pagination-btn prev"
-  >
-    ◀ Prev
-  </button>
-  
-  <span className="page-number">{currentPage}</span>
+            <button 
+              onClick={handlePrevPage} 
+              disabled={currentPage === 1}
+              className="pagination-btn prev"
+            >
+              ◀ Prev
+            </button>
+            
+            <span className="page-number">{currentPage}</span>
 
-  <button 
-    onClick={handleNextPage} 
-    className="pagination-btn next"
-  >
-    Next ▶
-  </button>
-</div>
+            <button 
+              onClick={handleNextPage} 
+              className="pagination-btn next"
+            >
+              Next ▶
+            </button>
+          </div>
         </Fragment>
       )}
     </Fragment>

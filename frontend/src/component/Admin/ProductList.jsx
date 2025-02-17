@@ -3,47 +3,47 @@ import { DataGrid } from "@mui/x-data-grid"; // ✅ Updated MUI import
 import "./ProductList.css";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useAlert } from "react-alert";
 import { Button } from "@mui/material"; // ✅ Updated MUI import
 import MetaData from "../layout/MetaData";
 import EditIcon from "@mui/icons-material/Edit"; // ✅ Updated MUI import
 import DeleteIcon from "@mui/icons-material/Delete";
 import SideBar from "./SideBar";
-import { clearErrors, getAdminProduct, deleteProduct} from "../../actions/productAction"; // ✅ Import deleteProduct
-import { resetDeleteProduct } from "../../reducers/productReducer"
+import { clearErrors, getAdminProduct, deleteProduct } from "../../actions/productAction"; // ✅ Import deleteProduct
+import { resetDeleteProduct } from "../../reducers/productReducer";
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
+
 const ProductList = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
   const navigate = useNavigate();
 
   // ✅ Ensure correct state keys
   const { error, products } = useSelector((state) => state.productList); // `productList` should match `store.js`
   const { error: deleteError, isDeleted } = useSelector((state) => state.product);
 
- // ✅ Define deleteProductHandler
+  // ✅ Define deleteProductHandler
   const deleteProductHandler = (id) => {
     dispatch(deleteProduct(id));
   };
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error); // ✅ Use toast instead of alert
       dispatch(clearErrors());
     }
 
     if (deleteError) {
-      alert.error(deleteError);
+      toast.error(deleteError); // ✅ Use toast instead of alert
       dispatch(clearErrors());
     }
 
     if (isDeleted) {
-      alert.success("Product Deleted Successfully");
+      toast.success("Product Deleted Successfully"); // ✅ Use toast instead of alert
       navigate("/admin/dashboard");
       dispatch(resetDeleteProduct()); // ✅ Reset delete state
     }
 
     dispatch(getAdminProduct());
-  }, [dispatch, alert, error,deleteError, isDeleted, navigate]);
+  }, [dispatch, error, deleteError, isDeleted, navigate]);
 
   // ✅ Fix renderCell to use `params.row.id`
   const columns = [
@@ -61,11 +61,11 @@ const ProductList = () => {
       renderCell: (params) => {
         return (
           <Fragment>
-            <Link to={`/admin/product/${params.row.id}`}> ✅ Fixed
+            <Link to={`/admin/product/${params.row.id}`}>
               <EditIcon />
             </Link>
 
-           <Button onClick={() => deleteProductHandler(params.row.id)}> {/* ✅ Fixed */}
+            <Button onClick={() => deleteProductHandler(params.row.id)}>
               <DeleteIcon />
             </Button>
           </Fragment>
@@ -81,7 +81,6 @@ const ProductList = () => {
     stock: product.stock,
     price: product.price,
   })) || [];
-  
 
   return (
     <Fragment>
@@ -97,7 +96,7 @@ const ProductList = () => {
             pageSize={10}
             disableSelectionOnClick
             className="productListTable"
-            autoHeight 
+            autoHeight
           />
         </div>
       </div>

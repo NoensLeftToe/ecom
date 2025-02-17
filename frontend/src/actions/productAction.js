@@ -36,10 +36,9 @@ export const getProduct = createAsyncThunk(
 
       const link = buildURL(baseURL, params);
 
-      console.log("Request URL:", link);
 
       const { data } = await axios.get(link, { signal: controller.signal });
-      console.log("API Response:", data);
+  
 
       return data; // Automatically becomes the payload for fulfilled state
     } catch (error) {
@@ -64,8 +63,6 @@ export const getProductDetails = createAsyncThunk(
       const { data } = await axios.get(`/api/v1/product/${id}`, {
         signal: controller.signal,
       });
-
-      console.log("API Response:", data);
 
       return data.product; // Automatically becomes the payload for fulfilled state
     } catch (error) {

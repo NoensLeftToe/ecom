@@ -1,40 +1,33 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
-import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import { toast } from "react-toastify"; // ✅ Using react-toastify
 import { clearErrors, getAllReviews, deleteReviews } from "../../actions/productAction";
 import { deleteReviewReset } from "../../reducers/productReducer";
 import MetaData from "../layout/MetaData";
 import DeleteIcon from "@mui/icons-material/Delete";
-import StarIcon from "@mui/icons-material/Star"; // ✅ Changed from @material-ui/icons
+import StarIcon from "@mui/icons-material/Star";
 import SideBar from "./SideBar";
+import "react-toastify/dist/ReactToastify.css";
 import "./ProductReviews.css";
 
 const ProductReviews = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
   const navigate = useNavigate();
-
   const { error: deleteError, isDeleted } = useSelector((state) => state.review);
   const { error, reviews, loading } = useSelector((state) => state.productReviews);
-
   const [productId, setProductId] = useState("");
 
   const deleteReviewHandler = (reviewId) => {
-    console.log("Deleting review with ID:", reviewId);
-    console.log("Product ID:", productId);
-  
     if (!reviewId || !productId) {
-      alert.error("Missing review ID or product ID.");
+      toast.error("Missing review ID or product ID.");
       return;
     }
-  
     dispatch(deleteReviews({ reviewId, productId }));
-
   };
-  
+
   const productReviewsSubmitHandler = (e) => {
     e.preventDefault();
     dispatch(getAllReviews(productId));
@@ -44,22 +37,20 @@ const ProductReviews = () => {
     if (productId.length === 24) {
       dispatch(getAllReviews(productId));
     }
-    
     if (error) {
-      alert.error(error);
+      toast.error(error);
       dispatch(clearErrors());
     }
     if (deleteError) {
-      alert.error(deleteError);
+      toast.error(deleteError);
       dispatch(clearErrors());
     }
     if (isDeleted) {
-      alert.success("Review Deleted Successfully");
+      toast.success("Review Deleted Successfully");
       navigate("/admin/reviews");
       dispatch(deleteReviewReset());
-
     }
-  }, [dispatch, alert, error, deleteError, navigate, isDeleted, productId]);
+  }, [dispatch, error, deleteError, navigate, isDeleted, productId]);
 
   const columns = [
     { field: "id", headerName: "Review ID", minWidth: 200, flex: 0.5 },

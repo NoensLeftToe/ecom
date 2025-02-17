@@ -5,12 +5,14 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline"; // ✅ Updated im
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, clearMessage } from "../../reducers/forgotPasswordReducer"; // ✅ Correct Import
 import { forgotPassword } from "../../actions/userAction";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
 import MetaData from "../layout/MetaData";
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
+
+  // Replaced react-alert with react-toastify
+  // const alert = useAlert();
 
   const { error, message, loading } = useSelector(
     (state) => state.forgotPassword
@@ -26,12 +28,12 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error); // ✅ Replaced alert.error with toast.error
       dispatch(clearErrors());
     }
 
     if (message) {
-      alert.success(message);
+      toast.success(message); // ✅ Replaced alert.success with toast.success
       dispatch(clearMessage()); // ✅ Now correctly imported
     }
   }, [dispatch, error, message]);

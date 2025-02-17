@@ -8,7 +8,7 @@ import ProductCard from '../Home/ProductCard';
 import Pagination from "react-js-pagination";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
-import {useAlert} from "react-alert";
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
 
 const categories = [
   "Studio Ghibli",
@@ -22,22 +22,21 @@ const categories = [
   "Gift Sets",
   "manga",
   "manhwa"
-]
-
+];
 
 const Products = () => {
   const dispatch = useDispatch();
 
-  const alert = useAlert();
+  // Replaced react-alert with react-toastify
+  // const alert = useAlert();
 
-  const { products, loading, error, productsCount, resultPerPage, filteredProductsCount, } = useSelector((state) => state.productList);
+  const { products, loading, error, productsCount, resultPerPage, filteredProductsCount } = useSelector((state) => state.productList);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState([0, 25000]);
   const [category, setCategory] = useState("");
 
   const [ratings, setRatings] = useState(0);
-
 
   const { keyword } = useParams();
 
@@ -50,14 +49,13 @@ const Products = () => {
   };
 
   useEffect(() => {
-      if(error){
-        alert.error(error);
-        dispatch(clearErrors());
-      }
+    if (error) {
+      toast.error(error); // ✅ Replace alert.error with toast.error
+      dispatch(clearErrors());
+    }
 
     dispatch(getProduct({ keyword, currentPage, price, category, ratings }));
-  }, [dispatch, keyword, currentPage, price, category, ratings, alert, error]);
-
+  }, [dispatch, keyword, currentPage, price, category, ratings, error]);
 
   let count = filteredProductsCount;
 
@@ -70,9 +68,8 @@ const Products = () => {
           <h2 className="productsHeading">Products</h2>
 
           <div className="products">
-            {products && 
-            products.map((product)=>(
-              <ProductCard key={product._id} product={product}/>
+            {products && products.map((product) => (
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
 
@@ -115,10 +112,9 @@ const Products = () => {
             </fieldset>
           </div>
 
-          {
-            resultPerPage < count && (
-              <div className="paginationBox">
-          <Pagination
+          {resultPerPage < count && (
+            <div className="paginationBox">
+              <Pagination
                 activePage={currentPage}
                 itemsCountPerPage={resultPerPage}
                 totalItemsCount={productsCount}
@@ -132,9 +128,8 @@ const Products = () => {
                 activeClass="pageItemActive"
                 activeLinkClass="pageLinkActive"
               />
-          </div>
-            )
-          }
+            </div>
+          )}
         </Fragment>
       )}
     </Fragment>

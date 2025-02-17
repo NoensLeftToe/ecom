@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { clearErrors, updateProduct, getProductDetails } from "../../actions/productAction";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify";
 import { Button } from "@mui/material";
 import MetaData from "../layout/MetaData";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -16,12 +16,8 @@ import { resetUpdateProduct } from "../../reducers/productReducer";
 
 const UpdateProduct = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
   const navigate = useNavigate();
-  const { id: productId } = useParams(); // ✅ React Router v6 way to get params
-
-  // Debugging: Check if productId is coming from the URL
-  console.log("Product ID from URL:", productId);
+  const { id: productId } = useParams();
 
   const { error, product } = useSelector((state) => state.productDetails);
   const { loading, error: updateError, isUpdated } = useSelector((state) => state.product);
@@ -49,14 +45,12 @@ const UpdateProduct = () => {
     "Manhwa",
   ];
 
-  // ✅ Fetch product details only if productId is valid
   useEffect(() => {
     if (productId) {
       dispatch(getProductDetails(productId));
     }
   }, [dispatch, productId]);
 
-  // ✅ Update state only when the product is fetched
   useEffect(() => {
     if (product && product._id === productId) {
       setName(product.name || "");
@@ -66,31 +60,29 @@ const UpdateProduct = () => {
       setStock(product.stock || 0);
       setOldImages(product.images || []);
     }
-  }, [productId, product]); // ✅ Prevents infinite loops
+  }, [productId, product]);
 
-  // ✅ Handle errors & reset state after update
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error);
       dispatch(clearErrors());
     }
     if (updateError) {
-      alert.error(updateError);
+      toast.error(updateError);
       dispatch(clearErrors());
     }
     if (isUpdated) {
-      alert.success("Product Updated Successfully");
+      toast.success("Product Updated Successfully");
       navigate("/admin/products");
-      dispatch(resetUpdateProduct()); // ✅ Reset update state
+      dispatch(resetUpdateProduct());
     }
-  }, [dispatch, alert, error, updateError, isUpdated, navigate]);
+  }, [dispatch, error, updateError, isUpdated, navigate]);
 
-  // ✅ Handle form submission with productId validation
   const updateProductSubmitHandler = (e) => {
     e.preventDefault();
 
     if (!productId) {
-      alert.error("Error: Product ID is missing!");
+      toast.error("Error: Product ID is missing!");
       return;
     }
 
@@ -105,11 +97,9 @@ const UpdateProduct = () => {
       myForm.append("images", image);
     });
 
-    dispatch(updateProduct({ id: productId, productData: myForm })); // ✅ Pass an object
-
+    dispatch(updateProduct({ id: productId, productData: myForm }));
   };
 
-  // ✅ Handle image uploads
   const updateProductImagesChange = (e) => {
     const files = Array.from(e.target.files);
 
@@ -199,7 +189,7 @@ const UpdateProduct = () => {
             <div id="createProductFormFile">
               <input type="file" accept="image/*" multiple onChange={updateProductImagesChange} />
             </div>
-              
+
             <div id="createProductFormImage">
               {oldImages.map((image, index) => (
                 <img key={index} src={image.url} alt="Old Product Preview" />

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom"; // ✅ React Router v6
 import { clearErrors, createProduct } from "../../actions/productAction";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // ✅ Using react-toastify
 import { Button } from "@mui/material"; // ✅ Updated Material UI import
 import MetaData from "../layout/MetaData";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -11,12 +11,11 @@ import StorageIcon from "@mui/icons-material/Storage";
 import SpellcheckIcon from "@mui/icons-material/Spellcheck";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import SideBar from "./SideBar";
-import "./NewProduct.css";
-import {resetCreateProduct} from "../../reducers/productReducer"
+import "react-toastify/dist/ReactToastify.css"; // ✅ Toastify styles
+import { resetCreateProduct } from "../../reducers/productReducer";
 
 const NewProduct = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
   const navigate = useNavigate(); // ✅ React Router v6 friendly
 
   const { loading, error, success } = useSelector((state) => state.createProduct);
@@ -45,17 +44,16 @@ const NewProduct = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error); // ✅ Toastify error message
       dispatch(clearErrors());
     }
-  
+
     if (success) {
-      alert.success("Product Created Successfully");
+      toast.success("Product Created Successfully"); // ✅ Toastify success message
       navigate("/admin/dashboard"); // ✅ Navigate after success
       dispatch(resetCreateProduct()); // ✅ Dispatch reset action correctly
     }
-  }, [dispatch, alert, error, success, navigate]);
-  
+  }, [dispatch, error, success, navigate]);
 
   // ✅ Handle image upload
   const createProductImagesChange = (e) => {

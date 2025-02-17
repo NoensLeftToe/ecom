@@ -3,7 +3,7 @@ import CheckoutSteps from "../Cart/CheckoutSteps";
 import { useSelector, useDispatch } from "react-redux";
 import MetaData from "../layout/MetaData";
 import { Typography } from "@mui/material";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
 import {
   CardNumberElement,
   CardCvcElement,
@@ -16,14 +16,12 @@ import "./Payment.css";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import EventIcon from "@mui/icons-material/Event";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
-import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
-import {createOrder, clearErrors} from "../../actions/orderAction"
-
+import { useNavigate } from "react-router-dom"; // ✅ Use useNavigate() instead of history
+import { createOrder, clearErrors } from "../../actions/orderAction";
 
 const Payment = () => {
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
   const dispatch = useDispatch();
-  const alert = useAlert();
   const stripe = useStripe();
   const elements = useElements();
   const payBtn = useRef(null);
@@ -31,11 +29,11 @@ const Payment = () => {
 
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.user);
-  const{error} = useSelector((state)=> state.newOrder)
+  const { error } = useSelector((state) => state.newOrder);
+
   const paymentData = {
     amount: Math.round(orderInfo.totalPrice * 100),
   };
-
 
   const order = {
     shippingInfo,
@@ -46,13 +44,12 @@ const Payment = () => {
     totalPrice: orderInfo.totalPrice,
   };
 
-
   const submitHandler = async (e) => {
     e.preventDefault();
     payBtn.current.disabled = true;
 
     if (!stripe || !elements) {
-      alert.error("Stripe has not been properly initialized.");
+      toast.error("Stripe has not been properly initialized."); // ✅ Use toast.error
       return;
     }
 
@@ -83,11 +80,10 @@ const Payment = () => {
 
       if (result.error) {
         payBtn.current.disabled = false;
-        alert.error(result.error.message);
+        toast.error(result.error.message); // ✅ Use toast.error
       } else {
         if (result.paymentIntent.status === "succeeded") {
           // Successfully processed the payment
-
           order.paymentInfo = {
             id: result.paymentIntent.id,
             status: result.paymentIntent.status,
@@ -97,21 +93,21 @@ const Payment = () => {
 
           navigate("/success");
         } else {
-          alert.error("There was an issue with the payment.");
+          toast.error("There was an issue with the payment."); // ✅ Use toast.error
         }
       }
     } catch (error) {
       payBtn.current.disabled = false;
-      alert.error(error.response?.data?.message || "Payment failed.");
+      toast.error(error.response?.data?.message || "Payment failed."); // ✅ Use toast.error
     }
   };
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error); // ✅ Use toast.error
       dispatch(clearErrors());
     }
-  }, [dispatch, error, alert]);
+  }, [dispatch, error]);
 
   return (
     <Fragment>

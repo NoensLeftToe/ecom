@@ -3,21 +3,19 @@ import "./Shipping.css";
 import { useSelector, useDispatch } from "react-redux";
 import { saveShippingInfo } from "../../actions/cartAction";
 import MetaData from "../layout/MetaData";
-import PinDropIcon from "@mui/icons-material/PinDrop"; // ✅ Fixed import
-import HomeIcon from "@mui/icons-material/Home"; // ✅ Fixed import
-import LocationCityIcon from "@mui/icons-material/LocationCity"; // ✅ Fixed import
-import PublicIcon from "@mui/icons-material/Public"; // ✅ Fixed import
-import PhoneIcon from "@mui/icons-material/Phone"; // ✅ Fixed import
-import TransferWithinAStationIcon from "@mui/icons-material/TransferWithinAStation"; // ✅ Fixed import
+import PinDropIcon from "@mui/icons-material/PinDrop";
+import HomeIcon from "@mui/icons-material/Home";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import PublicIcon from "@mui/icons-material/Public";
+import PhoneIcon from "@mui/icons-material/Phone";
+import TransferWithinAStationIcon from "@mui/icons-material/TransferWithinAStation";
 import { Country, State } from "country-state-city";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
 import CheckoutSteps from "../Cart/CheckoutSteps";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom"; // ✅ Use useNavigate() instead of history
 
 const Shipping = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
   const navigate = useNavigate(); // ✅ Use useNavigate() instead of history
 
   const { shippingInfo } = useSelector((state) => state.cart);
@@ -33,7 +31,7 @@ const Shipping = () => {
     e.preventDefault();
 
     if (phoneNo.length !== 10) {
-      alert.error("Phone Number should be 10 digits long");
+      toast.error("Phone Number should be 10 digits long"); // ✅ Use toast.error
       return;
     }
 

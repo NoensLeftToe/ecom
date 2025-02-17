@@ -2,20 +2,19 @@ import React, { Fragment, useEffect, useState } from "react";
 import Carousel from "react-material-ui-carousel";
 import "./ProductDetails.css";
 import { useSelector, useDispatch } from "react-redux";
-import { clearErrors, getProductDetails } from "../../actions/productAction";
+import { clearErrors, getProductDetails, newReview } from "../../actions/productAction";
 import { useParams } from "react-router-dom";
-import { Rating, Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material"; // ✅ MUI v5 Fix
+import { Rating, Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
 import ReviewCard from "./ReviewCard";
 import Loader from "../layout/Loader/Loader";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; 
 import MetaData from "../layout/MetaData";
 import { addItemsToCart } from "../../actions/cartAction";
-import { newReviewReducer, reset } from "../../reducers/productReducer"; 
+import { reset } from "../../reducers/productReducer"; 
 
 const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const alert = useAlert();
 
   const { product = {}, loading, error } = useSelector(
     (state) => state.productDetails
@@ -27,22 +26,23 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error); 
       dispatch(clearErrors());
     }
 
     if (reviewError) {
-      alert.error(reviewError);
+      toast.error(reviewError); 
       dispatch(clearErrors());
     }
 
     if (success) {
-      alert.success("Review Submitted Successfully");
+      toast.success("Review Submitted Successfully"); 
       dispatch(reset());
+      dispatch(getProductDetails(id)); // Fetch updated product details after review submission
     }
 
-    dispatch(getProductDetails(id));
-  }, [dispatch, id, error, alert, reviewError, success]);
+    dispatch(getProductDetails(id)); // Fetch product details on mount
+  }, [dispatch, id, error, success, reviewError]);
 
   const options = {
     size: "large",
@@ -67,7 +67,7 @@ const ProductDetails = () => {
 
   const addToCartHandler = () => {
     dispatch(addItemsToCart({ id, quantity }));
-    alert.success(`${product.name} added to cart`);
+    toast.success(`${product.name} added to cart`); 
   };
 
   const submitReviewToggle = () => {
@@ -76,12 +76,11 @@ const ProductDetails = () => {
 
   const reviewSubmitHandler = () => {
     const myForm = new FormData();
-
     myForm.set("rating", rating);
     myForm.set("comment", comment);
     myForm.set("productId", id);
 
-    dispatch(newReview(myForm));
+    dispatch(newReview(myForm)); // Submit review
     setOpen(false);
   };
 
@@ -158,6 +157,18 @@ const ProductDetails = () => {
 
           <h3 className="reviewsHeading">REVIEWS</h3>
 
+          {/* Display Reviews */}
+          <div className="reviews">
+            {product.reviews && product.reviews.length > 0 ? (
+              product.reviews.map((review) => (
+                <ReviewCard key={review._id} review={review} />
+              ))
+            ) : (
+              <p>No reviews yet.</p>
+            )}
+          </div>
+
+          {/* Review Submit Dialog */}
           <Dialog
             aria-labelledby="simple-dialog-title"
             open={open}

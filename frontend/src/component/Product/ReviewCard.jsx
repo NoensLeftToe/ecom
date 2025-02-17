@@ -15,7 +15,7 @@ const ReviewCard = ({ review }) => { // ✅ Accept `review` as a prop
       <img src={bento} alt="User" />
       <p>{review?.name || "Anonymous"}</p> {/* ✅ Prevent undefined errors */}
       <Rating {...options} />
-      <span>{review?.comment || "No comment provided"}</span>
+      <span>{review?.comment?.length > 100 ? review.comment.substring(0, 100) + "..." : review.comment}</span>
     </div>
   );
 };

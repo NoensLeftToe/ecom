@@ -10,7 +10,7 @@ import {
 } from "../../actions/orderAction";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../layout/Loader/Loader";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // ✅ Import toast from react-toastify
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import { Button } from "@mui/material";
 import { resetUpdate } from "../../reducers/orderReducer";
@@ -23,7 +23,6 @@ const ProcessOrder = () => {
   const { error: updateError, isUpdated } = useSelector((state) => state.order);
 
   const dispatch = useDispatch();
-  const alert = useAlert();
 
   const [status, setStatus] = useState("");
 
@@ -32,26 +31,25 @@ const ProcessOrder = () => {
     const myForm = new FormData();
     myForm.set("status", status);
     dispatch(updateOrder({ id, order: myForm }));
-
   };
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error); // ✅ Replaced alert with toast
       dispatch(clearErrors());
     }
     if (updateError) {
-      alert.error(updateError);
+      toast.error(updateError); // ✅ Replaced alert with toast
       dispatch(clearErrors());
     }
     if (isUpdated) {
-      alert.success("Order Updated Successfully");
+      toast.success("Order Updated Successfully"); // ✅ Replaced alert with toast
       dispatch(resetUpdate());
       navigate("/admin/orders");
     }
     dispatch(getOrderDetails(id));
     
-  }, [dispatch, alert, error, id, isUpdated, updateError, navigate]);
+  }, [dispatch, error, id, isUpdated, updateError, navigate]);
 
   return (
     <Fragment>

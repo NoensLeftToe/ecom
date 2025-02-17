@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // Import toast from react-toastify
 import { Button } from "@mui/material";
 import MetaData from "../layout/MetaData";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -14,12 +14,11 @@ import { resetUpdate } from "../../reducers/ProfileSlice";
 
 const UpdateUser = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
   const navigate = useNavigate();
   const { id: userId } = useParams();
 
   if (!userId || userId.trim() === "") {
-    alert.error("Invalid user ID");
+    toast.error("Invalid user ID"); // Use toastify for errors
     return null;
   }
 
@@ -42,34 +41,33 @@ const UpdateUser = () => {
     }
 
     if (error) {
-      alert.error(error);
+      toast.error(error); // Replace alert with toastify
       dispatch(clearErrors());
     }
 
     if (updateError) {
-      alert.error(updateError);
+      toast.error(updateError); // Replace alert with toastify
       dispatch(clearErrors());
     }
 
     if (isUpdated) {
-      alert.success("User Updated Successfully");
+      toast.success("User Updated Successfully"); // Replace alert with toastify
       navigate("/admin/users");
       dispatch(resetUpdate());
     }
-  }, [dispatch, alert, error, isUpdated, updateError, user, userId, navigate]);
+  }, [dispatch, error, isUpdated, updateError, user, userId, navigate]);
 
   const updateUserSubmitHandler = (e) => {
     e.preventDefault();
-  
+
     if (!userId) {
-      alert.error("User ID is missing or invalid");
+      toast.error("User ID is missing or invalid"); // Replace alert with toastify
       return;
     }
-  
+
     const updatedUserData = { name, email, role };  // ✅ Correct variable
     dispatch(updateUser({ id: userId, userData: updatedUserData }));  // ✅ Use the correct variable
   };
-  
 
   return (
     <Fragment>

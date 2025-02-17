@@ -1,21 +1,21 @@
 import React, { Fragment, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid"; // Updated MUI import
+import { DataGrid } from "@mui/x-data-grid";
 import "./productList.css";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify"; // ✅ Using react-toastify
 import { Button } from "@mui/material";
 import MetaData from "../layout/MetaData";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SideBar from "./SideBar";
 import { resetDelete } from "../../reducers/orderReducer";
-import {getAllOrders, deleteOrder, clearErrors} from "../../actions/orderAction"
+import { getAllOrders, deleteOrder, clearErrors } from "../../actions/orderAction";
+import "react-toastify/dist/ReactToastify.css"; // ✅ Toastify styles
 
 const OrderList = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Use navigate instead of history
-  const alert = useAlert();
+  const navigate = useNavigate(); // ✅ Using React Router v6 navigate
 
   const { error, orders } = useSelector((state) => state.allOrders);
   const { error: deleteError, isDeleted } = useSelector((state) => state.order);
@@ -26,23 +26,23 @@ const OrderList = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error);
       dispatch(clearErrors());
     }
 
     if (deleteError) {
-      alert.error(deleteError);
+      toast.error(deleteError);
       dispatch(clearErrors());
     }
 
     if (isDeleted) {
-      alert.success("Order Deleted Successfully");
+      toast.success("Order Deleted Successfully");
       navigate("/admin/orders");
       dispatch(resetDelete());
     }
 
     dispatch(getAllOrders());
-  }, [dispatch, alert, error, deleteError, isDeleted, navigate]);
+  }, [dispatch, error, deleteError, isDeleted, navigate]);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 300, flex: 1 },
