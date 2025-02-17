@@ -57,12 +57,15 @@ const ProductDetails = () => {
   const [comment, setComment] = useState("");
 
   const increaseQuantity = () => {
-    if (product?.Stock <= quantity) return;
-    setQuantity(quantity + 1);
+    if (product?.Stock > quantity) {
+      setQuantity(quantity + 1);
+    }
   };
 
   const decreaseQuantity = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
   };
 
   const addToCartHandler = () => {

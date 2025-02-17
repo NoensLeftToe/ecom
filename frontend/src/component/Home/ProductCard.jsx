@@ -4,12 +4,9 @@ import { Rating } from "@mui/material"
 
 const ProductCard = ({ product }) => {
   const options = {
-    edit: false,
     value: product.ratings,
     readOnly: true
   }
-
-  
 
   return (
     <Link className="productCard" to={`/product/${product._id}`}>

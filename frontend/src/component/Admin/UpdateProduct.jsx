@@ -57,7 +57,7 @@ const UpdateProduct = () => {
       setPrice(product.price || 0);
       setDescription(product.description || "");
       setCategory(product.category || "");
-      setStock(product.stock || 0);
+      setStock(product.stock || 0); // Ensure stock is set correctly
       setOldImages(product.images || []);
     }
   }, [productId, product]);
@@ -91,7 +91,7 @@ const UpdateProduct = () => {
     myForm.set("price", price);
     myForm.set("description", description);
     myForm.set("category", category);
-    myForm.set("stock", stock);
+    myForm.set("Stock", stock); // Ensure you're sending 'Stock' (capitalized) to the backend
 
     images.forEach((image) => {
       myForm.append("images", image);
