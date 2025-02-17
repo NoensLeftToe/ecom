@@ -1,14 +1,21 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0', // This makes the server accessible on the network
-    port: 5173,      // Optional: Specify the port
+    host: '0.0.0.0',
+    port: 5173, // Ensure this matches where you're running Vite
     proxy: {
-      '/api': 'http://192.168.100.7:4000', // Adjust this to your backend API server's URL
+      '/api': {
+        target: 'http://192.168.100.7:4000', // Adjust this to your backend API server's URL
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+    mimeTypes: {
+      '.js': 'application/javascript',
+      '.jsx': 'application/javascript',
     }
   },
   build: {
@@ -23,5 +30,8 @@ export default defineConfig({
       }
     },
     chunkSizeWarningLimit: 1000,  // Increase the chunk size warning limit (1MB)
+  },
+  optimizeDeps: {
+    exclude: ['some-broken-package'], // If a package is causing issues, add it here
   }
-})
+});

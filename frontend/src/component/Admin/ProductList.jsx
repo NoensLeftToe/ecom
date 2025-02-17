@@ -78,7 +78,7 @@ const ProductList = () => {
   const rows = products?.map((product) => ({
     id: product._id,   // Ensure `_id` exists in API response
     name: product.name,
-    stock: product.stock,
+    stock: product.Stock,
     price: product.price,
   })) || [];
 
