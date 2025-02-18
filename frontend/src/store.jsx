@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { productListReducer, productDetailsReducer, newReviewReducer, createProductReducer , productReducer, productReviewsReducer, reviewReducer} from "./reducers/productReducer"; // Import the updated product reducers
-import { userReducer, allUsersReducer, userDetailsReducer} from "./reducers/userReducer"; 
+import { userReducer, allUsersReducer, userDetailsReducer} from "./reducers/UserReducer"; 
 import profileReducer from "./reducers/ProfileSlice";
 import forgotPasswordReducer from "./reducers/forgotPasswordReducer";
 import cartReducer from "./reducers/cartReducer";
