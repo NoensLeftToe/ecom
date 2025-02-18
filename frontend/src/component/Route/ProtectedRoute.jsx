@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { FaBullseye } from 'react-icons/fa';
 
 const ProtectedRoute = ({ component: Component, isAdmin, ...rest }) => {
   const { loading, isAuthenticated, user } = useSelector((state) => state.user);
