@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import "./productList.css";
+import "./ProductList.css";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"; // ✅ Using react-toastify
