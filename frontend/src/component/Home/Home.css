@@ -1,5 +1,5 @@
 .banner {
-    background-image: url("../../images/fudge.jpg");
+    background-image: url("/fudge.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
